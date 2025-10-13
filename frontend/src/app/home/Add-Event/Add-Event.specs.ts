@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EventDialog } from './event-dialog';
+import { EventDialog } from './Add-Event';
 
 describe('EventDialog', () => {
   let component: EventDialog;
