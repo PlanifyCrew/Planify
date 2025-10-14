@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Animated Log In and Sign Up Form</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/auth.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!--nochmal prüfen ob wirklich benötigt-->
+    <link rel="stylesheet" href="auth.css">
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="form-container sign-up-container">
+    <div id="container">
+        <div class="sign-up-container">
             <form action="#">
                 <h1>Sign Up</h1>
                 <span>Bitte gib deine email an um dich zu registrieren.</span>
@@ -18,29 +18,27 @@
                 <button (click)="signUp()">Sign Up</button>
             </form>
         </div>
-        <div class="form-container sign-in-container">
+        <div class="log-in-container">
             <form action="#">
                 <h1>Log In</h1>
-                <span>Es sei denn du hast schon einen Account :D</span>
+                <span>Es sei denn du hast schon einen Account</span>
                 <input type="email" placeholder="Email" />
                 <input type="password" placeholder="Password" />
                 <button (click)="login()">Log In</button>
             </form>
         </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Registriere dich!</h1>
-                    <p>Gib deine info an. Slay!</p>
-                    <span>Du hast schon einen Account?</span>
-                    <a class="ghost" id="signIn">Log In</a>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Wilkommen zurück!</h1>
-                    <p>Gib deine Benutzerdaten ein!</p>
-                    <span>Du hast noch kein Account? Kein Problem!</span>
-                    <a class="ghost" id="signUp">Sign Up</a>
-                </div>
+        <div class="overlay">
+            <div class="overlay-left">
+                <h1>Registriere dich!</h1>
+                <p>Gib deine info an.</p>
+                <span>Du hast schon einen Account?</span>
+                <a class="ghost" id="signIn">Log In</a>
+            </div>
+            <div class="overlay-right">
+                <h1>Wilkommen zurück!</h1>
+                <p>Gib deine Benutzerdaten ein!</p>
+                <span>Du hast noch kein Account? Kein Problem!</span>
+                <a class="ghost" id="signUp">Sign Up</a>
             </div>
         </div>
     </div>
