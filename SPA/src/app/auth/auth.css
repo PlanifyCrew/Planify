@@ -16,7 +16,6 @@ body {
 .section {
     position: absolute;
     width: 300px;
-    
 }
 
 .input {
@@ -34,6 +33,13 @@ body {
     border: none;
 }
 
+.page-btn {
+    width: 100px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+}
+
 #login {
     left: 40px;
     transition: 0.5s;
@@ -44,20 +50,22 @@ body {
     transition: 0.5s;
 }
 
-.overlay-login {
+#over-login {
     background-color: rgb(253, 42, 42);
     width: 350px;
     height: 400px;
     position: absolute;
     left: 350px;
     transition: 0.5s;
+    padding-left: 15px;
 }
 
-.overlay-signup {
+#over-signup {
     background-color: rgb(49, 216, 34);
     width: 350px;
     height: 400px;
     position: absolute;
     left: -800px;
     transition: 0.5s;
+    padding-left: 15px;
 }
