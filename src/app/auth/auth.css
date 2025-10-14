@@ -1,25 +1,63 @@
 body {
-    display: flex;  
+    display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 150px;
+    background-color: antiquewhite;
 }
 
-#sign-up-container {
-    background-color: aqua;
-    width: 50%;
-    left: 0;
-    z-index: 1;
+.container {
+    background-color: aliceblue;
+    width: 700px;
+    height: 400px;
+    position: absolute;
+    margin-top: 70px;
+    overflow: hidden;
 }
 
-#log-in-container {
-    background-color: rgb(0, 255, 42);
-    width: 50%;
-    left: 0;
-    z-index: 2;
+.section {
+    position: absolute;
+    width: 300px;
+    
 }
 
-#container {
-    background-color: rgb(184, 31, 31);
+.input {
+    width: 80%;
+    padding: 10px 3px;
+    border-bottom: 1px solid black;
+    outline: none;
+    background: transparent;
+}
+
+.submit-btn {
+    width: 100px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+}
+
+#login {
+    left: 40px;
+    transition: 0.5s;
+}
+
+#signup {
+    left: 800px;
+    transition: 0.5s;
+}
+
+.overlay-login {
+    background-color: rgb(253, 42, 42);
+    width: 350px;
+    height: 400px;
+    position: absolute;
+    left: 350px;
+    transition: 0.5s;
+}
+
+.overlay-signup {
+    background-color: rgb(49, 216, 34);
+    width: 350px;
+    height: 400px;
+    position: absolute;
+    left: -800px;
+    transition: 0.5s;
 }
