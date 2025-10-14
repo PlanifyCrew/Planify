@@ -15,13 +15,13 @@ export class TaskService {
 
   getTaskData(postTokenData: any) {
     //return of({ token: 'dummy_token_123' });
-    return this.http.get('http://localhost:8080/api/task?token=' + postTokenData);
+    return this.http.get('http://localhost:8090/api/task?token=' + postTokenData);
   //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/task?token=
   }
 
   postUserLogIn(postUserLoginData: Object) {
     //return of({ token: 'dummy_token_123' });
-    return this.http.post('http://localhost:8080/api/login', postUserLoginData);
+    return this.http.post('http://localhost:8090/api/login', postUserLoginData);
  //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/login
   }
 }

@@ -36,4 +36,9 @@ export class Auth implements OnInit {
       () => console.log('Login complete.')
     );
   }
+
+
+  signUp(): void {
+    //alert('Signing up ' + this.email + ' password ' + this.password);
+  }
 }
