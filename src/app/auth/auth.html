@@ -9,10 +9,10 @@
 <body>
     <div class="container">
         <form id="login" class="section">
-            <h1>Log In</h1>
+            <h1>Login</h1>
                 <input type="email" class="input" placeholder="Email" required>
                 <input type="password" class="input" placeholder="Password" required>
-                <button type="submit" class="submit-btn" (click)="login()">Log In</button>
+                <button type="submit" class="submit-btn" (click)="login()">Login</button>
         </form>
         <form id="signup" class="section">
             <h1>Sign Up</h1>
@@ -21,23 +21,18 @@
                 <input type="password" class="input" placeholder="Password" required>
                 <button type="submit" class="submit-btn" (click)="signUp()">Sign Up</button>   
         </form>
-        <div class="section">
-            <div id="over-login" class="overlay-login">
-                <h1>Registriere dich!</h1>
-                <h1>Wilkommen zurück!</h1>
-                <p>Gib deine Benutzerdaten ein!</p>
-                <span>Du hast noch kein Account? Kein Problem!</span>
-                <button type="button" class="page-btn"  onclick="changeToSignup()">Sign Up</button>
-            </div>
+        <div id="over-login" class="section">
+            <h1>Wilkommen zurück!</h1>
+            <span>Du hast noch keinen Account?</span>
+            <button type="button" class="page-btn"  onclick="changeToSignup()">Sign Up</button>
         </div>
-        <div class="section">
-            <div id="over-signup" class="overlay-signup">
-                <p>Gib deine info an.</p>
-                <span>Du hast schon einen Account?</span>
-                <button type="button" class="page-btn"  onclick="changeToLogin()">Login</button>               
-            </div>
+        <div id="over-signup" class="section">
+            <h1>Schön dich zu sehen!</h1>
+            <span>Du hast schon einen Account?</span>
+            <button type="button" class="page-btn"  onclick="changeToLogin()">Login</button>               
         </div>
     </div>
+
     <script>
         var x = document.getElementById("login");
         var y = document.getElementById("signup");
@@ -57,7 +52,6 @@
             z.style.left = "350px";
             a.style.left = "-800px";
         }
-
     </script>
 </body>
 </html>
