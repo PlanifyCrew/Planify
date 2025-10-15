@@ -19,11 +19,11 @@ a.selected {
        color : brown;
 }
 .taskmenu {
-       // align : center;
+       align : center;
        margin : auto;
        border-style : double;
        border-radius : 5px;
-       border-with : thin;
+       border-width : thin;
        width : 80%;
        text-align: center;
 }
