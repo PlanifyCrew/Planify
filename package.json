@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@angular/core": "^20.3.4",
-    "@angular/forms": "^20.3.4",
-    "@angular/router": "^20.3.4"
-  }
-}

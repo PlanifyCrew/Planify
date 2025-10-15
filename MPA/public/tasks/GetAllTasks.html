@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mosbach Task Organizer</title>
+    <link rel="stylesheet" href="../css/mosbach-tasks.css">
+    <script src="../js/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<h1>Mosbach Task Organizer</h1>
+
+<h2>Show all tasks</h2>
+You have the following homework to do.<br><br>
+
+<ul id="tasklist">
+</ul>
+
+
+
+
+<br/><br/><br/><br/><br/>
+<button>Sort via Name</button>&nbsp;&nbsp;<button>Sort via Priority</button>
+
+<br/><br/>
+<a href="../Homepage.html">Back to Homepage</a>&nbsp;&nbsp;
+
+
+<script>
+    (function getAllTasks(){
+        var myTasks = {
+            tasks : [{
+                name : 'Learn French',
+                priority : 2
+            },{
+                name : 'Submit Portfolio',
+                priority : 1
+            }]
+        };
+        console.log("Sending get on task to BFF with token ...");
+        $.ajax({
+            url : 'https://infinite-castle-58473-a76558dbf65e.herokuapp.com/api/task' + '?token=' + localStorage.getItem("mosbachtasktoken"),
+            type : 'get',
+            dataType : 'json',
+            contentType : 'application/json',
+            success : function(data) {
+                var temp = "";
+                for (i = 0; i < data.tasks.length; i++)
+                    temp += "<li>" + data.tasks[i].name + " " + data.tasks[i].priority + "</li>";
+                $("#tasklist").html(temp);
+
+            },
+            processData : false,
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert('I did not get any response from the server.');
+                var temp = "";
+                for (i = 0; i < myTasks.tasks.length; i++)
+                    temp += "<li>" + myTasks.tasks[i].name + " " + myTasks.tasks[i].priority + "</li>";
+                $("#tasklist").html(temp);
+            }
+        });
+    })();
+</script>
+
+
+
+
+
+</body>
+</html>

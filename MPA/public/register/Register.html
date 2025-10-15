@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mosbach Task Organizer</title>
+    <link rel="stylesheet" href="../css/mosbach-tasks.css">
+    <script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<h1>Mosbach Task Organizer</h1>
+
+<h2>Registration Page</h2>
+
+<p>
+    Please provide the following information.<br><br>
+    Your Name: <input type="text" id="userName"/><br><br>
+    Your Email: <input type="email" id="userEmail"/><br><br>
+    Your Password: <input type="password" id="userPassword"/><br><br>
+    <button id="registerButton">Register me!</button><br><br>
+
+<a href="../Homepage.html">Go back to homepage</a>&nbsp;
+
+    <script>
+        $("#registerButton").click(function(){
+            var registerUser = {
+                name : $("#userName").val(),
+                email : $("#userEmail").val(),
+                password : $("#userPassword").val()
+            };
+            console.log("Sending post on user to BFF with user ...");
+            console.log(registerUser);
+            $.ajax({
+                url : 'https://infinite-castle-58473-a76558dbf65e.herokuapp.com/api/user',
+                type : 'post',
+                dataType : 'json',
+                contentType : 'application/json',
+                success : function(data) {
+                    alert('You are now registered.');
+                },
+                data : JSON.stringify(registerUser),
+                processData : false,
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert('I could not register you.');
+                }
+            });
+        });
+    </script>
+
+
+
+</body>
+</html>

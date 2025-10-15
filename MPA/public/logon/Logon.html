@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mosbach Task Organizer</title>
+    <link rel="stylesheet" href="../css/mosbach-tasks.css">
+    <script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<h1>Mosbach Task Organizer</h1>
+
+<h2>Logon Page</h2>
+
+<p>
+    Please provide the following information.<br><br>
+    Your Email: <input type="email" id="userEmail"/><br><br>
+    Your Password: <input type="password" id="userPassword"/><br><br>
+    <button id="loginButton">Log me on!</button><br><br>
+
+<a href="../Homepage.html">Go back to homepage</a>&nbsp;
+
+<script>
+    $("#loginButton").click(function(){
+        var loginUser = {
+            email : $("#userEmail").val(),
+            password : $("#userPassword").val()
+        };
+        console.log("Sending post on login to BFF with user ...");
+        console.log(loginUser);
+        $.ajax({
+            url : 'https://infinite-castle-58473-a76558dbf65e.herokuapp.com/api/login',
+            type : 'post',
+            dataType : 'json',
+            contentType : 'application/json',
+            success : function(data) {
+                alert('You are now logged on.');
+                localStorage.setItem('mosbachtasktoken', data.token);
+            },
+            data : JSON.stringify(loginUser),
+            processData : false,
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert('I could not log you in.');
+                localStorage.setItem('mosbachtasktoken', '123');
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+</body>
+</html>
