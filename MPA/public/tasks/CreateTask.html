@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mosbach Task Organizer</title>
+    <link rel="stylesheet" href="../css/mosbach-tasks.css">
+    <script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<h1>Mosbach Task Organizer</h1>
+
+<h2>Add a new task</h2>
+
+<p>
+    Please provide the following information.<br><br>
+    Task Name: <input type="text" id="taskName"/><br><br>
+    Task Priority: <input type="number" id="taskPriority"/><br><br>
+    <button id="taskCreateButton">Add the task to my list!</button><br><br>
+
+<a href="../Homepage.html">Go back to homepage</a>&nbsp;
+
+    <script>
+        $("#taskCreateButton").click(function(){
+            var createTask = {
+                token : localStorage.getItem("mosbachtasktoken"),
+                task : {
+                    name : $("#taskName").val(),
+                    priority : parseInt($("#taskPriority").val())
+                }
+            };
+            console.log("Sending post on task to BFF with task ...");
+            console.log(createTask);
+            $.ajax({
+                url : 'https://infinite-castle-58473-a76558dbf65e.herokuapp.com/api/task',
+                type : 'post',
+                dataType : 'json',
+                contentType : 'application/json',
+                success : function(data) {
+                    alert('Task has been added.');
+                },
+                data : JSON.stringify(createTask),
+                processData : false,
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert('I could not add the tas.');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

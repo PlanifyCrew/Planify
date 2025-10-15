@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mosbach Task Organizer</title>
+    <link rel="stylesheet" href="../css/mosbach-tasks.css">
+    <script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<h1>Mosbach Task Organizer</h1>
+
+<h2>Logoff Page</h2>
+
+<p>
+    Sorry to see you logging off.<br><br>
+    <button id="logoffButton">Log me out!</button><br><br>
+
+<a href="../Homepage.html">Go back to homepage</a>&nbsp;
+
+    <script>
+        $("#logoffButton").click(function(){
+            var logoffUser = {
+                token : localStorage.getItem('mosbachtasktoken')
+            };
+            console.log("Sending delete on login to BFF with token ...");
+            console.log(logoffUser);
+            $.ajax({
+                url : 'https://infinite-castle-58473-a76558dbf65e.herokuapp.com/api/login',
+                type : 'delete',
+                dataType : 'json',
+                contentType : 'application/json',
+                success : function(data) {
+                    alert('You are now logged off.');
+                    localStorage.setItem('mosbachtasktoken', 'OFF');
+                },
+                data : JSON.stringify(logoffUser),
+                processData : false,
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert('I could not log you off.');
+                    localStorage.setItem('mosbachtasktoken', 'OFF');
+                }
+            });
+        });
+    </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+body {
+    background-color : pink;
+    font-size: x-large;
+}
+h1  {
+       color : royalblue;
+}
+h2  {
+       color : blue;
+}
+a {
+       color : darkgreen;
+       font-size: xx-large;
+}
+a:hover {
+       font-size : 50px;
+}
+a.selected {
+       color : brown;
+}
+.taskmenu {
+       // align : center;
+       margin : auto;
+       border-style : double;
+       border-radius : 5px;
+       border-with : thin;
+       width : 80%;
+       text-align: center;
+}
+button {
+    font-size: x-large;
+}
+#tasktable {
+    border-style : solid;
+    border : thin;
+    float : left;
+    width : 40%;
+}
+#taskmap {
+    border-style : solid;
+    border : thin;
+    float : left;
+    width : 40%;
+}
+@media screen and (max-width: 900px) {
+  #tasktable {
+  	width: 80%;
+  }
+}
