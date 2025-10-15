@@ -1,10 +1,11 @@
-const form = document.getElementById("login");
-    
-form.addEventListener("submit", function (event) {
+const formLogin = document.getElementById("login");
+const formSignUp = document.getElementById("signup");
+
+formLogin.addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent form submission
 
-    const email = form.querySelector('input[type="email"]').value;
-    const password = form.querySelector('input[type="password"]').value;
+    const email = formLogin.querySelector('input[type="email"]').value;
+    const password = formLogin.querySelector('input[type="password"]').value;
 
     fetch('http://localhost:8090/api/login', {
         method: 'POST',
@@ -28,5 +29,36 @@ form.addEventListener("submit", function (event) {
     })
     .catch(error => {
         console.error('Login-Error:', error);
+    });
+});
+
+
+formSignUp.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent form submission
+
+    const name = formSignUp.querySelector('input[type="text"]').value;
+    const email = formSignUp.querySelector('input[type="email"]').value;
+    const password = formSignUp.querySelector('input[type="password"]').value;
+
+    fetch('http://localhost:8090/api/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+    })
+    .then(async response => {
+        if (response.ok) {
+            // Registration successful
+            const data = await response.json();
+            console.log('Registration successful');
+            console.log("Antwort vom Backend:", data); // z. B. {token: "...", code: "200"}
+        } else {
+            // Handle registration error
+            console.error('Registration failed');
+            const errorData = await response.json();
+            console.error("Fehler vom Backend:", errorData); // z. B. {error: "...", code: "401"}
+        }
+    })
+    .catch(error => {
+        console.error('Registration-Error:', error);
     });
 });
