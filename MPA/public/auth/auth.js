@@ -20,11 +20,17 @@ formLogin.addEventListener("submit", function (event) {
             console.log("Antwort vom Backend:", data); // z. B. {token: "...", code: "200"}
             // Token lokal speichern
             localStorage.setItem("dummy_token", data.token);
+
+            // Weiterleitung zur Homepage, wenn Login-Daten korrekt sind
+            if (data && data.token)
+                window.location.href = "../home/home.html";
         } else {
             // Handle login error
             console.error('Login failed');
             const errorData = await response.json();
             console.error("Fehler vom Backend:", errorData); // z. B. {error: "...", code: "401"}
+
+            showErrorMessage();
         }
     })
     .catch(error => {
@@ -51,6 +57,9 @@ formSignUp.addEventListener("submit", function (event) {
             const data = await response.json();
             console.log('Registration successful');
             console.log("Antwort vom Backend:", data); // z. B. {token: "...", code: "200"}
+
+            // Weiterleitung zur Homepage, da automatischer Login
+            // window.location.href = "../home/home.html";
         } else {
             // Handle registration error
             console.error('Registration failed');
@@ -62,3 +71,15 @@ formSignUp.addEventListener("submit", function (event) {
         console.error('Registration-Error:', error);
     });
 });
+
+
+function showErrorMessage() {
+    let errorMessage = document.getElementById("error-message");
+    errorMessage.style.display = "block";
+    errorMessage.classList.add("show");
+
+    setTimeout(() => {
+        errorMessage.classList.remove("show");
+        errorMessage.style.display = "none";
+    }, 3000);
+}
