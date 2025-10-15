@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../data/task-service';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, HttpClientModule],
   templateUrl: './auth.html',
-  styleUrls: ['./auth.css']
+  styleUrls: ['./auth.css'],
+  providers: [TaskService]
 })
 
 export class Auth implements OnInit {
