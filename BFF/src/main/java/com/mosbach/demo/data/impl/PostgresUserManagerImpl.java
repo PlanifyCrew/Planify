@@ -7,6 +7,7 @@ import com.mosbach.demo.data.api.UserManager;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,9 +18,9 @@ import java.util.logging.Logger;
 
 public class PostgresUserManagerImpl implements UserManager {
 
-    String databaseURL = "jdbc:postgresql://cee3ebbhveeoab.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d6juffo78h12bv";
-    String username = "udh9d9snr2ffb4";
-    String password = "p3eb32789be02f537b2e0bc5f95aa66b27e345fc435534dae7933cd36073d598d";
+    String databaseURL = "jdbc:postgresql://localhost:5432/PlanifyDB";
+    String username = "postgres";
+    String password = "Slay123";
     BasicDataSource basicDataSource;
 
     // Singleton
@@ -42,15 +43,50 @@ public class PostgresUserManagerImpl implements UserManager {
 
         final Logger createUserLogger = Logger.getLogger("CreateUserLogger");
         createUserLogger.log(Level.INFO,"Start creating user " + user.getName());
-        Statement stmt = null;
-        Connection connection = null;
+        //Statement stmt = null;
+        //Connection connection = null;
+        String sql = "INSERT INTO users (name, email, password, token) VALUES (?, ?, ?, ?)";
 
+        try (Connection connection = basicDataSource.getConnection();
+         PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+        stmt.setString(1, user.getName());
+        stmt.setString(2, user.getEmail());
+        stmt.setString(3, user.getPassword());
+        stmt.setString(4, user.getToken() != null ? user.getToken() : "");
+
+        int rows = stmt.executeUpdate();
+
+        if (!connection.getAutoCommit())
+            connection.commit();
+
+        // Wenn funktioniert hat, wird 1 zurückgegeben
+        if (rows >= 1)
+            return true;
+        // Wenn nicht
+        return false;
+
+    } catch (SQLException e) {
+        createUserLogger.log(Level.SEVERE, "SQL Exception occurred: " + e.getMessage(), e);
+        e.printStackTrace();
+        return false;
+    }
+
+
+        /*
         try {
             connection = basicDataSource.getConnection();
+
             stmt = connection.createStatement();
-            String udapteSQL = "INSERT into users (name, email, password, token) VALUES (" +
+            String updateSQL = "INSERT into users (name, email, password, token) VALUES (" +
                     "'" + user.getName() + "', '" + user.getEmail() + "', '" + user.getPassword() + "', '" + user.getToken() + "')";
-            stmt.executeUpdate(udapteSQL);
+            stmt.executeUpdate(updateSQL);
+
+            // Fehler mit console.log ausgeben
+            if (stmt.getUpdateCount() != 1) {
+                System.out.println("Error: Could not insert new user in DB");
+                return false;
+            }
 
             stmt.close();
             connection.close();
@@ -65,24 +101,64 @@ public class PostgresUserManagerImpl implements UserManager {
             e.printStackTrace();
         }
         return true;
+        */
     }
 
     @Override
     public String logUserOn(String email, String password) {
         final Logger logOnUserLogger = Logger.getLogger("logOnUserLogger");
         logOnUserLogger.log(Level.INFO,"Start logging on user " + email);
-        Statement stmt = null;
-        Connection connection = null;
+        //Statement stmt = null;
+        //Connection connection = null;
 
-        // TODO Everybody gets the same token, it only works if we have only 1 user!!!
+        // Prüfen, ob Login-Daten korrekt sind
+        String selectSQL = "SELECT user_id FROM users WHERE email = ? AND password = ?";
+
+        try (Connection conn = basicDataSource.getConnection();
+            PreparedStatement selectStmt = conn.prepareStatement(selectSQL)) {
+
+            selectStmt.setString(1, email);
+            selectStmt.setString(2, password);
+
+            ResultSet rs = selectStmt.executeQuery();
+
+            if (!rs.next()) {
+                // Kein User gefunden
+                logOnUserLogger.warning("Login failed for " + email);
+                return "OFF";
+            }
+
+        int userId = rs.getInt("user_id");
+
+        // Token setzen
         String newToken = "123";
+
+        String updateSQL = "UPDATE users SET token = ? WHERE user_id = ?";
+        try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
+            updateStmt.setString(1, newToken);
+            updateStmt.setInt(2, userId);
+            updateStmt.executeUpdate();
+        }
+
+        if (!conn.getAutoCommit())
+            conn.commit();
+
+        logOnUserLogger.info("Login successful, token generated: " + newToken);
+        return newToken;
+
+        } catch (SQLException e) {
+            logOnUserLogger.log(Level.SEVERE, "SQL Exception occurred: " + e.getMessage(), e);
+            e.printStackTrace();
+            return "OFF";
+        }
+        /* 
         try {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
-            String udapteSQL = "UPDATE users SET token  = " +
+            String updateSQL = "UPDATE users SET token  = " +
                     "'" + newToken + "' " +
                     "WHERE email = '" + email + "' AND password = '" + password + "'";
-            stmt.executeUpdate(udapteSQL);
+            stmt.executeUpdate(updateSQL);
 
             stmt.close();
             connection.close();
@@ -97,22 +173,50 @@ public class PostgresUserManagerImpl implements UserManager {
             e.printStackTrace();
         }
         return newToken;
+        */
     }
 
     @Override
     public boolean logUserOff(String email) {
         final Logger logOffUserLogger = Logger.getLogger("logOffUserLogger");
-        logOffUserLogger.log(Level.INFO,"Start logging on user " + email);
-        Statement stmt = null;
-        Connection connection = null;
+        logOffUserLogger.log(Level.INFO,"Start logging off user " + email);
+        //Statement stmt = null;
+        //Connection connection = null;
 
+        String updateSQL = "UPDATE users SET token = ? WHERE email = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+         PreparedStatement stmt = connection.prepareStatement(updateSQL)) {
+            stmt.setString(1, "OFF");
+            stmt.setString(2, email);
+            int rows = stmt.executeUpdate();
+
+            if (!connection.getAutoCommit())
+                connection.commit();
+
+            logOffUserLogger.info("User logged off " + email);
+
+            // Bei Erfolg true zurückgeben
+            if (rows >= 1)
+                return true;
+
+            // Bei Misserfolg false zurückgeben
+            return false;
+
+        } catch (SQLException e) {
+            logOffUserLogger.log(Level.SEVERE, "SQL Exception occurred: " + e.getMessage(), e);
+            e.printStackTrace();
+        }
+        return false;
+
+        /*
         try {
             connection = basicDataSource.getConnection();
             stmt = connection.createStatement();
-            String udapteSQL = "UPDATE users SET token  = " +
+            String updateSQL = "UPDATE users SET token  = " +
                     "'OFF' " +
                     "WHERE email = '" + email + "'";
-            stmt.executeUpdate(udapteSQL);
+            stmt.executeUpdate(updateSQL);
 
             stmt.close();
             connection.close();
@@ -127,6 +231,7 @@ public class PostgresUserManagerImpl implements UserManager {
             e.printStackTrace();
         }
         return true;
+        */
     }
 
     @Override
@@ -185,7 +290,7 @@ public class PostgresUserManagerImpl implements UserManager {
                     "name varchar(100) NOT NULL, " +
                     "email varchar(100) NOT NULL, " +
                     "password varchar(100) NOT NULL, " +
-                    "token varchar(100) NOT NULL)");
+                    "token varchar(100))");
 
         } catch (SQLException e) {
             e.printStackTrace();
