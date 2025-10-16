@@ -23,6 +23,10 @@ import software.amazon.awssdk.services.sqs.*;
 import software.amazon.awssdk.services.sqs.model.*;
 import software.amazon.awssdk.regions.Region;
 
+// Variante Postgres
+import com.mosbach.demo.data.impl.PostgresTaskManagerImpl;
+import com.mosbach.demo.data.impl.PostgresUserManagerImpl;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,9 @@ public class MappingController {
             PropertyFileUserManagerImpl.getPropertyFileUserManagerImpl("src/main/resources/users.properties");
             // PostgresUserManagerImpl.getPostgresUserManagerImpl();
 
+        // Variante Postgres
+        PostgresUserManagerImpl pgUserManager = PostgresUserManagerImpl.getPostgresUserManagerImpl();
+
     @PostMapping(
             path = "/login",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
@@ -52,11 +59,17 @@ public class MappingController {
         Logger myLogger = Logger.getLogger("UserLoggingOn");
         myLogger.info("Received a POST request on login with email " + user.getEmail());
 
-        String token = userManager.logUserOn(user.getEmail(), user.getPassword());
+        //String token = userManager.logUserOn(user.getEmail(), user.getPassword());
+        //myLogger.info("Token generated " + token);
+
+        // Variante Postgres
+        String token = pgUserManager.logUserOn(user.getEmail(), user.getPassword());
         myLogger.info("Token generated " + token);
 
-        // TODO
         // Fehlerfall behandeln
+        if (token.equals("OFF"))
+            return
+                    new TokenAnswer("OFF","0");
 
         return
                 new TokenAnswer(token,"200");
@@ -74,15 +87,17 @@ public class MappingController {
         myLogger.info("Received a DELETE request on login with token " + token.getToken());
 
         boolean couldLogoffUser =
-                userManager.logUserOff(userManager.getUserEmailFromToken(token.getToken()));
+                //userManager.logUserOff(userManager.getUserEmailFromToken(token.getToken()));
+                pgUserManager.logUserOff(pgUserManager.getUserEmailFromToken(token.getToken()));
 
         myLogger.info("User logged off " + couldLogoffUser);
 
-        // TODO
         // Fehlerfall behandeln
+        if (!couldLogoffUser) {
+            return new com.mosbach.demo.model.user.MessageAnswer("User could not be logged out.");
+        }
 
-        return
-                new com.mosbach.demo.model.user.MessageAnswer("User logged out.");
+        return new com.mosbach.demo.model.user.MessageAnswer("User logged out.");
     }
 
 
@@ -96,6 +111,7 @@ public class MappingController {
         Logger myLogger = Logger.getLogger("UserCreate");
         myLogger.info("Received a POST request on user with email " + userWithName.getEmail());
 
+        /*
         boolean couldCreateUser = userManager
                         .createUser(
                             new UserImpl(
@@ -105,10 +121,24 @@ public class MappingController {
                                     "OFF"
                             )
                         );
-        myLogger.info("User created " + couldCreateUser);
+                        */
+        // Variante Postgres
+        boolean couldCreateUser = pgUserManager
+                .createUser(
+                        new UserImpl(
+                                userWithName.getName(),
+                                userWithName.getEmail(),
+                                userWithName.getPassword(),
+                                "OFF"
+                        )
+                );
 
-        // TODO
-        // Fehlerfall behandeln
+        if (couldCreateUser) {
+            myLogger.info("User created " + couldCreateUser);
+        }
+        else {
+            myLogger.info("User could not be created " + couldCreateUser);
+        }
 
         return
                 new com.mosbach.demo.model.user.MessageAnswer("User created.");
@@ -196,8 +226,8 @@ public class MappingController {
     @GetMapping("/task/createtables")
     @ResponseStatus(HttpStatus.OK)
     public String createTask() {
-        PostgresTaskManagerImpl.getPostgresTaskManagerImpl().createTaskTable();
-        PostgresUserManagerImpl.getPostgresUserManagerImpl().createUserTable();
+        //PostgresTaskManagerImpl.getPostgresTaskManagerImpl().createTaskTable();
+        //PostgresUserManagerImpl.getPostgresUserManagerImpl().createUserTable();
         return "Database Tables created";
     }
 
