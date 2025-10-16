@@ -5,9 +5,14 @@ body {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 }
 
+img {
+    width: 250px;
+    height: auto;
+}
+
 .container {
     position: absolute;
-    top: 200px;
+    top: 250px;
     background-color: #213e6e;
     width: 840px;
     height: 480px;
