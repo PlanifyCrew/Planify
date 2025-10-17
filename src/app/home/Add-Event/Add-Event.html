@@ -7,8 +7,29 @@
     <link rel="stylesheet" href="Add-Event.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Termin erstellen</h1>
+        <form class="titel-text-datum">
+            <div class="section-erstens">
+                <input type="text" id="titel" class="titel-datum" placeholder="Titel" required>
+                <input type="date" id="datum" class="titel-datum" required>
+            </div>
+            <div>
+                <textarea id="beschreibung" class="section-input" placeholder="Beschreibung"></textarea>
+            </div>
+        </form>
+        <frorm class="details">
+            <label for="beginnZeit">Beginn:</label>
+            <input type="time" id="beginnZeit" name="beginnZeit">
+            <label for="endeZeit">Ende:</label>
+            <input type="time" id="endeZeit" name="endeZeit">
+        </form>
+        <form class="users">
+            <input type="email" id="addUsers" name="addUser" placeholder="Teilnehmer hinzufügen">
+            <button type="button" id="showUsers" >Teilnehmer anzeigen</button>
+        </form>
+        <button type="submit" id="speichern">Speichern</button>
+    </div>
 
-    
-   
 </body>
 </html>
