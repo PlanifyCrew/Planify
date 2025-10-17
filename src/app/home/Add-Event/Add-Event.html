@@ -8,26 +8,31 @@
 </head>
 <body>
     <div class="container">
+        <div class="btn-close"><button type="button" id="close">&#x274C;</button></div>
         <h1>Termin erstellen</h1>
         <form class="titel-text-datum">
-            <div class="section-erstens">
-                <input type="text" id="titel" class="titel-datum" placeholder="Titel" required>
-                <input type="date" id="datum" class="titel-datum" required>
+            <div class="input-text">
+                <input type="text" id="titel" name="titel" placeholder="Titel" required>
+                <input type="date" id="datum" name="datum" required>
             </div>
-            <div>
-                <textarea id="beschreibung" class="section-input" placeholder="Beschreibung"></textarea>
-            </div>
+            <textarea id="beschreibung" name="beschreibung" placeholder="Beschreibung"></textarea>
         </form>
-        <frorm class="details">
-            <label for="beginnZeit">Beginn:</label>
-            <input type="time" id="beginnZeit" name="beginnZeit">
-            <label for="endeZeit">Ende:</label>
-            <input type="time" id="endeZeit" name="endeZeit">
-        </form>
-        <form class="users">
-            <input type="email" id="addUsers" name="addUser" placeholder="Teilnehmer hinzufügen">
-            <button type="button" id="showUsers" >Teilnehmer anzeigen</button>
-        </form>
+        <div class="details">
+            <form class="zeit">
+                <div class="beginn-time">
+                    <label for="startZeit">Beginn:</label>
+                    <input type="time" id="startZeit" name="startZeit">
+                </div>
+                <div class="end-time">
+                    <label for="endeZeit">Ende:</label>
+                    <input type="time" id="endeZeit" name="endeZeit">
+                </div>
+            </form>
+            <form class="users">
+                <input type="email" id="addUsers" name="addUser" placeholder="Teilnehmer hinzufügen">
+                <button type="button" id="showUsers" >Teilnehmer anzeigen</button>
+            </form>
+        </div>
         <button type="submit" id="speichern">Speichern</button>
     </div>
 
