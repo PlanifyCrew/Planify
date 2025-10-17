@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="btn-close"><button type="button" id="close">&#x274C;</button></div>
+        <div class="btn-close"><button type="button" id="close">&#10006;</button></div>
         <h1>Termin erstellen</h1>
         <form class="titel-text-datum">
             <div class="input-text">
@@ -21,7 +21,7 @@
             <form class="zeit">
                 <div class="beginn-time">
                     <label for="startZeit">Beginn:</label>
-                    <input type="time" id="startZeit" name="startZeit">
+                    <input type="time" id="startZeit" name="startZeit">              
                 </div>
                 <div class="end-time">
                     <label for="endeZeit">Ende:</label>
@@ -29,8 +29,9 @@
                 </div>
             </form>
             <form class="users">
-                <input type="email" id="addUsers" name="addUser" placeholder="Teilnehmer hinzufügen">
-                <button type="button" id="showUsers" >Teilnehmer anzeigen</button>
+                <input type="email" id="input-addUser" name="addUser" placeholder="Teilnehmer E-Mail">
+                <button type="button" id="showUsers" >Teilnehmer anzeigen</button><br>
+                <button type="button" id="addUser">Hinzufügen</button>
             </form>
         </div>
         <button type="submit" id="speichern">Speichern</button>
