@@ -1,0 +1,55 @@
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.container{
+    background-color: aqua;
+    width: 800px;
+    height: 500px;
+}
+
+h1 {
+    background-color: azure;
+    font-size: 45px;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50px;
+}
+
+.section-erstens {
+    background-color: brown;
+    width: 700px;
+    margin-left: 50px;
+    margin-bottom: 10px;
+}
+
+.titel-datum {
+    background-color: rgb(235, 198, 198);
+    margin-right: 5px;
+    padding-left: 4px;
+    height: 45px;
+    border: none;
+    border-radius: 5px;
+    border-bottom: 1px solid black;
+}
+
+#titel {
+   width: 400px;
+}
+
+#beschreibung {
+    width: 600px;
+    height: 50px;
+    padding-left: 7px;
+    border: none;
+    border-bottom: 6px solid red;
+    border-radius: 5px;
+}
+
+#datum {
+   width: 250px;
+}
+
