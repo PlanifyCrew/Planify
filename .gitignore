@@ -1,0 +1,14 @@
+# Node & Frontend
+node_modules/
+package-lock.json
+package.json
+
+# VSCode
+.vscode/
+
+# Gradle Build Cache (Backend)
+BFF/.gradle/
+
+# Sonstige temporäre Dateien
+dist/
+build/
