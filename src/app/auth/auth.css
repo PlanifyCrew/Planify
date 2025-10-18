@@ -128,3 +128,11 @@ button {
     left: -800px;
     transition: 0.5s;
 }
+
+.error-message {
+    color: #ff4d4d;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
