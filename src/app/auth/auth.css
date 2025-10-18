@@ -1,13 +1,9 @@
-/* Merged auth.css - preserves the detailed auth layout and simple defaults */
 
-/* Page layout and typography */
 body {
     display: flex;
     justify-content: center;
     background-color: #152B51;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-    align-items: center;
-    flex-direction: column;
 }
 
 img {
@@ -16,8 +12,7 @@ img {
 }
 
 .container {
-    position: absolute;
-    top: 250px;
+   top: 200px;
     background-color: #213e6e;
     width: 840px;
     height: 480px;
