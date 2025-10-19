@@ -1,25 +1,29 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CalendarComponent } from './calendar/calendar.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, CalendarComponent],
+  imports: [CommonModule, FullCalendarModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
-export class Home {
-  Name: string = 'User'; // für "Hello, {{ Name }}!"
+export class HomeComponent {
+  Name = 'Planify User';
 
-  // The custom calendar component provides events/config; Home keeps page-level concerns only.
-
-  openAddEvent() {
-    console.log('Open Add Event modal');
-  }
-
-  logout() {
-    console.log('User logged out');
-  }
+  calendarOptions: CalendarOptions = {
+    initialView: 'dayGridMonth',
+    plugins: [dayGridPlugin, interactionPlugin],
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,dayGridWeek,dayGridDay'
+    },
+    dateClick: (info) => alert(`Datum geklickt: ${info.dateStr}`),
+    events: [{ title: 'Meeting', date: new Date().toISOString().slice(0, 10) }]
+  };
 }
-

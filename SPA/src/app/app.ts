@@ -11,3 +11,8 @@ import { RouterOutlet } from '@angular/router';
 export class App {
   protected readonly title = signal('frontend');
 }
+export class Username {
+  Name = "Name";
+}
+
+
