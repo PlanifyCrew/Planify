@@ -24,4 +24,8 @@ export class TaskService {
     return this.http.post('http://localhost:8090/api/login', postUserLoginData);
  //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/login
   }
+
+  postUserSignUp(postUserSignUpData: Object) {
+    return this.http.post('http://localhost:8090/api/user', postUserSignUpData);
+  }
 }
