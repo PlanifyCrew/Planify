@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de" >
+<head>
+    <meta charset="UTF-8">
+    <title>Overlay for adding an event</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="Add-Event.css">
+</head>
+<body>
+    <div class="container">
+        <div class="btn-close"><button type="button" id="close">&#10006;</button></div>
+        <h1>Termin erstellen</h1>
+        <form class="titel-text-datum">
+            <div class="input-text">
+                <input type="text" id="titel" name="titel" placeholder="Titel" required>
+                <input type="date" id="datum" name="datum" required>
+            </div>
+            <textarea id="beschreibung" name="beschreibung" placeholder="Beschreibung"></textarea>
+        </form>
+        <div class="details">
+            <form class="zeit">
+                <div class="beginn-time">
+                    <label for="startZeit">Beginn:</label>
+                    <input type="time" id="startZeit" name="startZeit">              
+                </div>
+                <div class="end-time">
+                    <label for="endeZeit">Ende:</label>
+                    <input type="time" id="endeZeit" name="endeZeit">
+                </div>
+            </form>
+            <form class="users">
+                <input type="email" id="input-addUser" name="addUser" placeholder="Teilnehmer E-Mail">
+                <button type="button" id="showUsers" >Teilnehmer anzeigen</button><br>
+                <button type="button" id="addUser">Hinzufügen</button>
+            </form>
+        </div>
+        <button type="submit" id="speichern">Speichern</button>
+    </div>
+
+    <script src="Add-Event.js"></script>
+</body>
+</html>

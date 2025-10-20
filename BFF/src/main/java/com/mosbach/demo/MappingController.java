@@ -6,6 +6,7 @@ import com.mosbach.demo.data.impl.*;
 import com.mosbach.demo.model.alexa.AlexaRO;
 import com.mosbach.demo.model.alexa.OutputSpeechRO;
 import com.mosbach.demo.model.alexa.ResponseRO;
+import com.mosbach.demo.model.event.TokenEvent;
 import com.mosbach.demo.model.user.Token;
 import com.mosbach.demo.model.user.TokenAnswer;
 import com.mosbach.demo.model.user.User;
@@ -48,6 +49,7 @@ public class MappingController {
 
         // Variante Postgres
         PostgresUserManagerImpl pgUserManager = PostgresUserManagerImpl.getPostgresUserManagerImpl();
+        PostgresEventManagerImpl pgEventManager = PostgresEventManagerImpl.getPostgresEventManagerImpl();
 
     @PostMapping(
             path = "/login",
@@ -142,6 +144,38 @@ public class MappingController {
 
         return
                 new com.mosbach.demo.model.user.MessageAnswer("User created.");
+    }
+
+
+    @PostMapping(
+            path = "/event",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public com.mosbach.demo.model.user.MessageAnswer addTokenEvent(@RequestBody TokenEvent tokenEvent) {
+
+        Logger myLogger = Logger.getLogger("AddEvent");
+        myLogger.info("Received a POST request on event with token " + tokenEvent.getToken());
+
+        String email = pgUserManager.getUserEmailFromToken(tokenEvent.getToken());
+        myLogger.info("Found the following email for this token " + email);
+        if (email.equals("NOT-FOUND"))
+            return new com.mosbach.demo.model.user.MessageAnswer("No user found or not logged on.");
+        boolean couldCreateEvent = pgEventManager
+                .addEvent(
+                        new EventImpl(
+                                tokenEvent.getEvent().getName(),
+                                tokenEvent.getEvent().getDate(),
+                                tokenEvent.getEvent().getDescription(),
+                                tokenEvent.getEvent().getStartTime(),
+                                tokenEvent.getEvent().getEndTime(),
+                                email
+                        )
+                );
+
+        myLogger.info("Event created " + couldCreateEvent);
+
+        return new com.mosbach.demo.model.user.MessageAnswer("Event created.");
     }
 
 

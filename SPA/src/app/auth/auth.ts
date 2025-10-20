@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 })
 
 export class Auth implements OnInit {
+  name: string = '';
   email: string = '';
   password: string = '';
   private token: any;
@@ -41,6 +42,20 @@ export class Auth implements OnInit {
 
 
   signUp(): void {
-    //alert('Signing up ' + this.email + ' password ' + this.password);
+    alert('Signing up ' + this.name + ' email ' + this.email + ' password ' + this.password);
+
+    let userSignUp = {
+      name: this.name,
+      email: this.email,
+      password : this.password
+    }
+
+    this.taskService.postUserSignUp(userSignUp).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => console.log('Could not reach heroku.'),
+      () => console.log('Sign up complete.')
+    );
   }
 }

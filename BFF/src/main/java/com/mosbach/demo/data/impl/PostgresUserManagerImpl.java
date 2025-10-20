@@ -1,7 +1,5 @@
 package com.mosbach.demo.data.impl;
 
-import com.mosbach.demo.data.api.Task;
-import com.mosbach.demo.data.api.TaskManager;
 import com.mosbach.demo.data.api.User;
 import com.mosbach.demo.data.api.UserManager;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -48,7 +46,7 @@ public class PostgresUserManagerImpl implements UserManager {
         String sql = "INSERT INTO users (name, email, password, token) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = basicDataSource.getConnection();
-         PreparedStatement stmt = connection.prepareStatement(sql)) {
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
 
         stmt.setString(1, user.getName());
         stmt.setString(2, user.getEmail());
@@ -186,7 +184,8 @@ public class PostgresUserManagerImpl implements UserManager {
         String updateSQL = "UPDATE users SET token = ? WHERE email = ?";
 
         try (Connection connection = basicDataSource.getConnection();
-         PreparedStatement stmt = connection.prepareStatement(updateSQL)) {
+            PreparedStatement stmt = connection.prepareStatement(updateSQL)) {
+            
             stmt.setString(1, "OFF");
             stmt.setString(2, email);
             int rows = stmt.executeUpdate();
@@ -241,39 +240,35 @@ public class PostgresUserManagerImpl implements UserManager {
         readEmailLogger.log(Level.INFO,"Start reading users from DB. ");
 
         String foundEmail = "NOT-FOUND";
-        Statement stmt = null;
-        Connection connection = null;
+        //Statement stmt = null;
+        //Connection connection = null;
 
-        try {
-            connection = basicDataSource.getConnection();
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+        String sql = "SELECT email FROM users WHERE token = ?";
 
-            while (rs.next()) {
-                User u = new UserImpl(
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("token")
-                );
-                if (u.getToken().equals(token))
-                    foundEmail = u.getEmail();
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1, token);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (!rs.next()) {
+                // Kein User gefunden
+                readEmailLogger.warning("No user found with token " + token);
+                return "NOT-FOUND";
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            stmt.close();
-            connection.close();
+            foundEmail = rs.getString("email");
+
         } catch (SQLException e) {
+            System.err.println("Fehler beim Zugriff auf DB:");
+            System.err.println("SQLState: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
+            System.err.println("Message: " + e.getMessage());
             e.printStackTrace();
         }
 
         return foundEmail;
-
     }
-
 
 
     public void createUserTable() {
