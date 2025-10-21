@@ -8,20 +8,30 @@ import org.springframework.cglib.core.Local;
 
 public class EventImpl implements Event {
 
+    int event_id;
     String name;
     LocalDate date;
     String description;
     LocalTime startTime;
     LocalTime endTime;
-    String email;
 
-    public EventImpl(String name, LocalDate date, String description, LocalTime startTime, LocalTime endTime, String email) {
+    public EventImpl(int event_id, String name, LocalDate date, String description, LocalTime startTime, LocalTime endTime) {
+        this.event_id = event_id;
         this.name = name;
         this.date = date;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.email = email;
+    }
+
+    @Override
+    public void setEventId(int event_id) {
+        this.event_id = event_id;
+    }
+
+    @Override
+    public int getEventId() {
+        return event_id;
     }
 
     @Override
@@ -72,15 +82,5 @@ public class EventImpl implements Event {
     @Override
     public LocalTime getEndTime() {
         return endTime;
-    }
-
-    @Override
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String getEmail() {
-        return email;
     }
 }

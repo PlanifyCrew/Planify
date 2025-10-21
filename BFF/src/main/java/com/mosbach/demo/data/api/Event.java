@@ -6,6 +6,8 @@ import java.time.LocalTime;
 
 public interface Event {
 
+    void setEventId(int eventId);
+    int getEventId();
     void setName(String name);
     String getName();
     void setDate(LocalDate date);
@@ -16,6 +18,4 @@ public interface Event {
     LocalTime getStartTime();
     void setEndTime(LocalTime endTime);
     LocalTime getEndTime();
-    void setEmail(String email);
-    String getEmail();
 }

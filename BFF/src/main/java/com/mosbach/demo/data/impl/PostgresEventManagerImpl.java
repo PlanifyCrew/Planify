@@ -3,6 +3,7 @@ package com.mosbach.demo.data.impl;
 import com.mosbach.demo.data.api.Event;
 import com.mosbach.demo.data.api.EventManager;
 import com.mosbach.demo.model.user.User;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.net.URI;
@@ -38,28 +39,28 @@ public class PostgresEventManagerImpl implements EventManager  {
 
 
     @Override
-    public List<Event> getAllEventsPerEmail(String email) {
+    public List<Event> getAllEventsPerUserId(int user_id) {
         final Logger readEventLogger = Logger.getLogger("ReadEventLogger");
         readEventLogger.log(Level.INFO,"Start reading events from DB. ");
 
         List<Event> events = new ArrayList<>();
         //Statement stmt = null;
         //Connection connection = null;
-        String sql = "SELECT * FROM events WHERE email = ?";
+        String sql = "SELECT * FROM events WHERE user_id = ?";
 
         try (Connection connection = basicDataSource.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, email);
+            pstmt.setInt(1, user_id);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 Event event = new EventImpl(
+                        rs.getInt("event_id"),
                         rs.getString("name"),
                         rs.getObject("date", LocalDate.class),
                         rs.getString("description"),
                         rs.getObject("start_time", LocalTime.class),
-                        rs.getObject("end_time", LocalTime.class),
-                        rs.getString("email")
+                        rs.getObject("end_time", LocalTime.class)
                 );
                 events.add(event);
             }
@@ -71,33 +72,55 @@ public class PostgresEventManagerImpl implements EventManager  {
     }
 
     @Override
-    public boolean addEvent(Event event) {
+    public int addEvent(Event event, int user_id) {
         final Logger createEventLogger = Logger.getLogger("CreateEventLogger");
         createEventLogger.log(Level.INFO,"Start creating event " + event.getName());
+        int event_id = -1;
         //Statement stmt = null;
         //Connection connection = null;
 
-        String sql = "INSERT INTO events (name, date, description, start_time, end_time, email) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql_event = "INSERT INTO events (name, date, description, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
+        String sql_participant = "INSERT INTO participants (event_id, user_id, role, status) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = basicDataSource.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (Connection connection = basicDataSource.getConnection()) {
 
-            pstmt.setString(1, event.getName());
-            pstmt.setObject(2, event.getDate());
-            pstmt.setString(3, event.getDescription());
-            pstmt.setObject(4, event.getStartTime());
-            pstmt.setObject(5, event.getEndTime());
-            pstmt.setString(6, event.getEmail());
-            pstmt.executeUpdate();
+            // Transaktion starten
+            connection.setAutoCommit(false);
 
-            pstmt.close();
-            connection.close();
+            try (PreparedStatement pstmt = connection.prepareStatement(sql_event, Statement.RETURN_GENERATED_KEYS)) {
+
+                pstmt.setString(1, event.getName());
+                pstmt.setObject(2, event.getDate());
+                pstmt.setString(3, event.getDescription());
+                pstmt.setObject(4, event.getStartTime());
+                pstmt.setObject(5, event.getEndTime());
+                pstmt.executeUpdate();
+
+                ResultSet generatedKeys = pstmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    event_id = generatedKeys.getInt(1);
+                }
+
+                try (PreparedStatement psPart = connection.prepareStatement(sql_participant)) {
+                    // Organisator als Teilnehmer hinzufügen
+                    psPart.setInt(1, event_id);
+                    psPart.setInt(2, user_id);
+                    psPart.setString(3, "Organisator");
+                    psPart.setString(4, "erstellt");
+                    psPart.executeUpdate();
+                }
+
+        }
+
+        // alles committen
+        connection.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
-        return true;
+        
+        return event_id;
     }
 
     public void createTaskTable() {

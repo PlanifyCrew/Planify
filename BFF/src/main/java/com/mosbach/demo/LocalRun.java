@@ -12,6 +12,7 @@ public class LocalRun {
     public static void main(String[] args) {
         UserManager userManager = PropertyFileUserManagerImpl.getPropertyFileUserManagerImpl("src/main/resources/users.properties");
         userManager.createUser(new UserImpl(
+                    0,
                 "She She",
                 "she@she.com",
                 "123",

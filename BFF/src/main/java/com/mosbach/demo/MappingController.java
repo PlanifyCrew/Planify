@@ -90,7 +90,7 @@ public class MappingController {
 
         boolean couldLogoffUser =
                 //userManager.logUserOff(userManager.getUserEmailFromToken(token.getToken()));
-                pgUserManager.logUserOff(pgUserManager.getUserEmailFromToken(token.getToken()));
+                pgUserManager.logUserOff("dummy");
 
         myLogger.info("User logged off " + couldLogoffUser);
 
@@ -125,21 +125,21 @@ public class MappingController {
                         );
                         */
         // Variante Postgres
-        boolean couldCreateUser = pgUserManager
-                .createUser(
-                        new UserImpl(
+        UserImpl userImpl = new UserImpl(
+                                0,
                                 userWithName.getName(),
                                 userWithName.getEmail(),
                                 userWithName.getPassword(),
                                 "OFF"
-                        )
-                );
+                        );
+        
+        userImpl.setUserId(pgUserManager.createUser(userImpl));
 
-        if (couldCreateUser) {
-            myLogger.info("User created " + couldCreateUser);
+        if (userImpl.getUserId() != -1) {
+            myLogger.info("User created " + userImpl.getUserId());
         }
         else {
-            myLogger.info("User could not be created " + couldCreateUser);
+            myLogger.info("User could not be created " + userImpl.getUserId());
         }
 
         return
@@ -157,23 +157,23 @@ public class MappingController {
         Logger myLogger = Logger.getLogger("AddEvent");
         myLogger.info("Received a POST request on event with token " + tokenEvent.getToken());
 
-        String email = pgUserManager.getUserEmailFromToken(tokenEvent.getToken());
-        myLogger.info("Found the following email for this token " + email);
-        if (email.equals("NOT-FOUND"))
+        int userId = pgUserManager.getUserIdFromToken(tokenEvent.getToken());
+        myLogger.info("Found the following userId for this token " + userId);
+        if (userId == -1)
             return new com.mosbach.demo.model.user.MessageAnswer("No user found or not logged on.");
-        boolean couldCreateEvent = pgEventManager
-                .addEvent(
-                        new EventImpl(
+
+        EventImpl eventImpl = new EventImpl(
+                                0,
                                 tokenEvent.getEvent().getName(),
                                 tokenEvent.getEvent().getDate(),
                                 tokenEvent.getEvent().getDescription(),
                                 tokenEvent.getEvent().getStartTime(),
-                                tokenEvent.getEvent().getEndTime(),
-                                email
-                        )
-                );
+                                tokenEvent.getEvent().getEndTime()
+                        );
 
-        myLogger.info("Event created " + couldCreateEvent);
+        eventImpl.setEventId(pgEventManager.addEvent(eventImpl, userId));
+
+        myLogger.info("Event created " + eventImpl.getEventId());
 
         return new com.mosbach.demo.model.user.MessageAnswer("Event created.");
     }
@@ -189,17 +189,17 @@ public class MappingController {
         Logger myLogger = Logger.getLogger("AddTask");
         myLogger.info("Received a POST request on task with token " + tokenTask.getToken());
 
-        String email = userManager.getUserEmailFromToken(tokenTask.getToken());
-        myLogger.info("Found the following email for this token " + email);
-        if (email.equals("NOT-FOUND"))
+        String userId = "dummy";
+        myLogger.info("Found the following userId for this token " + userId);
+        if (userId.equals("NOT-FOUND"))
             return
-                    new com.mosbach.demo.model.user.MessageAnswer("No user found or not logged on.");;
+                    new com.mosbach.demo.model.user.MessageAnswer("No user found or not logged on.");
         boolean couldCreateTask = taskManager
                 .addTask(
                         new TaskImpl(
                                 tokenTask.getTask().getName(),
                                 tokenTask.getTask().getPriority(),
-                                email
+                                userId
                         )
                 );
 
@@ -237,15 +237,15 @@ public class MappingController {
         return
                 new com.mosbach.demo.model.user.MessageAnswer("Task created.");
     }
-
+/* 
     @GetMapping("/task")
     public TaskList getTasks(@RequestParam(value = "token", defaultValue = "123") String token) {
 
         Logger myLogger = Logger.getLogger("TaskLogger");
         myLogger.info("Received a GET request on task with token " + token);
 
-        String email = userManager.getUserEmailFromToken(token);
-        List<com.mosbach.demo.data.api.Task> tasks = taskManager.getAllTasksPerEmail(email);
+        String userId = userManager.getUserIdFromToken(token);
+        List<com.mosbach.demo.data.api.Task> tasks = taskManager.getAllTasksPerUserId(userId);
         List<Task> result = new ArrayList<>();
         for (com.mosbach.demo.data.api.Task t : tasks)
             result.add(new Task(t.getName(), t.getPriority()));
@@ -256,6 +256,7 @@ public class MappingController {
         return
                 new TaskList(result);
     }
+                */
 
     @GetMapping("/task/createtables")
     @ResponseStatus(HttpStatus.OK)

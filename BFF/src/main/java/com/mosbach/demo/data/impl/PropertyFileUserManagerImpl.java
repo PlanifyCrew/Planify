@@ -34,6 +34,8 @@ public class PropertyFileUserManagerImpl implements UserManager {
             int i = 1;
             while (properties.containsKey("User." + i + ".email")) {
                 temp.add(new UserImpl(
+                        properties.getProperty("User." + i + ".userId") != null ?
+                                Integer.parseInt(properties.getProperty("User." + i + ".userId")) : 0,
                         properties.getProperty("User." + i + ".name"),
                         properties.getProperty("User." + i + ".email"),
                         properties.getProperty("User." + i + ".password"),
@@ -67,7 +69,7 @@ public class PropertyFileUserManagerImpl implements UserManager {
     }
 
     @Override
-    public boolean createUser(User user) {
+    public int createUser(User user) {
         loadProperties();
         boolean found = false;
         for (User u : users)
@@ -77,9 +79,9 @@ public class PropertyFileUserManagerImpl implements UserManager {
             user.setToken("OFF");
             users.add(user);
             storeProperties();
-            return true;
+            return user.getUserId();
         }
-        return false;
+        return -1;
     }
 
 
@@ -121,13 +123,13 @@ public class PropertyFileUserManagerImpl implements UserManager {
     }
 
     @Override
-    public String getUserEmailFromToken(String tokenFromLogon) {
+    public int getUserIdFromToken(String tokenFromLogon) {
         loadProperties();
-        String userEmail = "";
+        int userId = -1;
         for (User u : users)
             if (u.getToken().equals(tokenFromLogon)) {
-                userEmail = u.getEmail();
+                userId = u.getUserId();
             }
-        return userEmail;
+        return userId;
     }
 }

@@ -4,16 +4,28 @@ import com.mosbach.demo.data.api.User;
 
 public class UserImpl implements User {
 
+    int userId;
     String name;
     String email;
     String password;
     String token;
 
-    public UserImpl(String name, String email, String password, String token) {
+    public UserImpl(int userId, String name, String email, String password, String token) {
+        this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.token = token;
+    }
+
+    @Override
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public int getUserId() {
+        return userId;
     }
 
     @Override

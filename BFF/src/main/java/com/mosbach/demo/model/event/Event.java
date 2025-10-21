@@ -20,6 +20,7 @@ import java.time.LocalTime;
 @JsonPropertyOrder({
     "name", "date", "description", "startTime", "endTime"
 })
+
 public class Event {
     @JsonProperty("name")
     private String name;

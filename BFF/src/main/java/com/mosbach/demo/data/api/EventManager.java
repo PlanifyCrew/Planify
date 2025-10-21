@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface EventManager {
 
-    List<Event> getAllEventsPerEmail(String email);
-    boolean addEvent(Event event);
+    List<Event> getAllEventsPerUserId(int user_id);
+    int addEvent(Event event, int user_id);
 
 }

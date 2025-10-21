@@ -37,7 +37,7 @@ public class PostgresUserManagerImpl implements UserManager {
 
 
     @Override
-    public boolean createUser(User user) {
+    public int createUser(User user) {
 
         final Logger createUserLogger = Logger.getLogger("CreateUserLogger");
         createUserLogger.log(Level.INFO,"Start creating user " + user.getName());
@@ -46,29 +46,36 @@ public class PostgresUserManagerImpl implements UserManager {
         String sql = "INSERT INTO users (name, email, password, token) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = basicDataSource.getConnection();
-            PreparedStatement stmt = connection.prepareStatement(sql)) {
+            PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        stmt.setString(1, user.getName());
-        stmt.setString(2, user.getEmail());
-        stmt.setString(3, user.getPassword());
-        stmt.setString(4, user.getToken() != null ? user.getToken() : "");
+            stmt.setString(1, user.getName());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getPassword());
+            stmt.setString(4, user.getToken() != null ? user.getToken() : "");
 
-        int rows = stmt.executeUpdate();
+            int rows = stmt.executeUpdate();
 
-        if (!connection.getAutoCommit())
-            connection.commit();
+            if (!connection.getAutoCommit())
+                connection.commit();
 
-        // Wenn funktioniert hat, wird 1 zurückgegeben
-        if (rows >= 1)
-            return true;
-        // Wenn nicht
-        return false;
+            // Wenn funktioniert hat, wird 1 zurückgegeben
+            if (rows >= 1) {
+                ResultSet rsKeys = stmt.getGeneratedKeys();
+                if (rsKeys.next()) {
+                    return rsKeys.getInt(1);
+                } else {
+                    createUserLogger.warning("Creating user failed, no ID obtained.");
+                    return -1;
+                }
+                }
+            // Wenn nicht
+            return -1;
 
-    } catch (SQLException e) {
-        createUserLogger.log(Level.SEVERE, "SQL Exception occurred: " + e.getMessage(), e);
-        e.printStackTrace();
-        return false;
-    }
+        } catch (SQLException e) {
+            createUserLogger.log(Level.SEVERE, "SQL Exception occurred: " + e.getMessage(), e);
+            e.printStackTrace();
+            return -1;
+        }
 
 
         /*
@@ -234,16 +241,16 @@ public class PostgresUserManagerImpl implements UserManager {
     }
 
     @Override
-    public String getUserEmailFromToken(String token) {
+    public int getUserIdFromToken(String token) {
 
         final Logger readEmailLogger = Logger.getLogger("ReadEmailLogger");
         readEmailLogger.log(Level.INFO,"Start reading users from DB. ");
 
-        String foundEmail = "NOT-FOUND";
+        int foundUserId = -1;
         //Statement stmt = null;
         //Connection connection = null;
 
-        String sql = "SELECT email FROM users WHERE token = ?";
+        String sql = "SELECT user_id FROM users WHERE token = ?";
 
         try (Connection connection = basicDataSource.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -254,10 +261,10 @@ public class PostgresUserManagerImpl implements UserManager {
             if (!rs.next()) {
                 // Kein User gefunden
                 readEmailLogger.warning("No user found with token " + token);
-                return "NOT-FOUND";
+                return -1;
             }
 
-            foundEmail = rs.getString("email");
+            foundUserId = rs.getInt("user_id");
 
         } catch (SQLException e) {
             System.err.println("Fehler beim Zugriff auf DB:");
@@ -267,7 +274,7 @@ public class PostgresUserManagerImpl implements UserManager {
             e.printStackTrace();
         }
 
-        return foundEmail;
+        return foundUserId;
     }
 
 
