@@ -28,4 +28,8 @@ export class TaskService {
   postUserSignUp(postUserSignUpData: Object) {
     return this.http.post('http://localhost:8090/api/user', postUserSignUpData);
   }
+
+  postAddEvent(postAddEventData: Object) {
+    return this.http.post('http://localhost:8090/api/event', postAddEventData);
+  }
 }
