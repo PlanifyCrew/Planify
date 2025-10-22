@@ -1,3 +1,6 @@
+const tnListe = [];
+
+
 document.getElementById("speichern").addEventListener("click", async () => {
     // Werte aus den Eingabefeldern holen
     const titel = document.getElementById("titel").value;
@@ -17,8 +20,9 @@ document.getElementById("speichern").addEventListener("click", async () => {
             date: datum,
             description: beschreibung,
             startTime: startZeit,
-            endTime: endeZeit,
-        }
+            endTime: endeZeit
+        },
+        tnListe: tnListe
     };
 
     try {
@@ -39,5 +43,14 @@ document.getElementById("speichern").addEventListener("click", async () => {
     } catch (error) {
         console.error("Netzwerkfehler:", error);
         alert("Server nicht erreichbar!");
+    }
+});
+
+
+document.getElementById("addUser").addEventListener("click", () => {
+    const teilnehmer = document.getElementById("input-addUser").value;
+    if (teilnehmer && !tnListe.includes(teilnehmer)) {
+        tnListe.push(teilnehmer);
+        document.getElementById("input-addUser").value = "";
     }
 });

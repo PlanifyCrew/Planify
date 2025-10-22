@@ -151,4 +151,39 @@ public class PostgresEventManagerImpl implements EventManager  {
     }
 
 
+    @Override
+    public boolean addParticipants(int event_id, List<Integer> user_ids) {
+        final Logger addParticipantLogger = Logger.getLogger("AddParticipantLogger");
+        addParticipantLogger.log(Level.INFO,"Start adding participants to event " + event_id);
+
+        String sql_participant = "INSERT INTO participants (event_id, user_id, role, status) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement psPart = connection.prepareStatement(sql_participant)) {
+
+            for (int user_id : user_ids) {
+                psPart.setInt(1, event_id);
+                psPart.setInt(2, user_id);
+                psPart.setString(3, "Teilnehmer");
+                psPart.setString(4, "eingeladen");
+                psPart.addBatch();
+            }
+
+            int[] results = psPart.executeBatch();
+            for (int result : results) {
+                if (result == PreparedStatement.SUCCESS_NO_INFO || result > 0) {
+                    // Erfolgreich hinzugefügt
+                } else {
+                    // Fehler beim Hinzufügen
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return  false;
+        }
+
+        return true;
+    }
+
 }

@@ -175,6 +175,14 @@ public class MappingController {
 
         myLogger.info("Event created " + eventImpl.getEventId());
 
+        int eventId = eventImpl.getEventId();
+        if (eventId != -1) {
+            pgEventManager.addParticipants(
+                eventId,
+                pgUserManager.getUserIdsFromEmails(tokenEvent.getTnListe())
+            );
+        }
+
         return new com.mosbach.demo.model.user.MessageAnswer("Event created.");
     }
 

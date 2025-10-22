@@ -1,10 +1,12 @@
 
-package com.mosbach.demo.model.event;
-import com.mosbach.demo.model.teilnehmer.TeilnehmerListe;
+package com.mosbach.demo.model.teilnehmer;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.cglib.core.Local;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,53 +16,21 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "token",
-    "event",
     "tnListe"
 })
-public class TokenEvent {
 
-    @JsonProperty("token")
-    private String token;
-    @JsonProperty("event")
-    private Event event;
+public class TeilnehmerListe {
     @JsonProperty("tnListe")
-    private List<String> tnListe;
+    private List<String> tnListe = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
-    public TokenEvent() {
+    public TeilnehmerListe() {
     }
 
-    public TokenEvent(String token, Event event, List<String> tnListe) {
+    public TeilnehmerListe(List<String> tnListe) {
         super();
-        this.token = token;
-        this.event = event;
         this.tnListe = tnListe;
-    }
-
-    @JsonProperty("token")
-    public String getToken() {
-        return token;
-    }
-
-    @JsonProperty("token")
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    @JsonProperty("event")
-    public Event getEvent() {
-        return event;
-    }
-
-    @JsonProperty("event")
-    public void setEvent(Event event) {
-        this.event = event;
     }
 
     @JsonProperty("tnListe")
@@ -86,16 +56,8 @@ public class TokenEvent {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(TokenEvent.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("token");
-        sb.append('=');
-        sb.append(((this.token == null)?"<null>":this.token));
-        sb.append(',');
-        sb.append("event");
-        sb.append('=');
-        sb.append(((this.event == null)?"<null>":this.event));
-        sb.append(',');
-        sb.append("tnListe");;
+        sb.append(TeilnehmerListe.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("tnListe");
         sb.append('=');
         sb.append(((this.tnListe == null)?"<null>":this.tnListe));
         sb.append(',');

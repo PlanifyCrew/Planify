@@ -132,4 +132,18 @@ public class PropertyFileUserManagerImpl implements UserManager {
             }
         return userId;
     }
+
+    @Override
+    public List<Integer> getUserIdsFromEmails(List<String> emailList) { 
+        loadProperties();
+        List<Integer> userIds = new ArrayList<>();
+        for (String email : emailList) {
+            for (User u : users) {
+                if (u.getEmail().equals(email)) {
+                    userIds.add(u.getUserId());
+                }
+            }
+        }
+        return userIds;
+    }
 }

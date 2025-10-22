@@ -2,6 +2,8 @@ package com.mosbach.demo.data.impl;
 
 import com.mosbach.demo.data.api.User;
 import com.mosbach.demo.data.api.UserManager;
+import com.mosbach.demo.model.teilnehmer.TeilnehmerListe;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
@@ -10,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -307,4 +310,33 @@ public class PostgresUserManagerImpl implements UserManager {
     }
 
 
+    @Override
+    public List<Integer> getUserIdsFromEmails(List<String> emails) {
+        List<Integer> userIds = new ArrayList<>();
+
+        if (emails == null || emails.isEmpty())
+            return userIds;
+
+        // ? Platzhalter für jede Email
+        String placeholders = String.join(",", Collections.nCopies(emails.size(), "?"));
+        String sql = "SELECT user_id FROM users WHERE email IN (" + placeholders + ")";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            for (int i = 0; i < emails.size(); i++) {
+                pstmt.setString(i + 1, emails.get(i));
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                userIds.add(rs.getInt("user_id"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userIds;
+    }
 }
