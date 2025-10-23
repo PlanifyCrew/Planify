@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 // import { of } from 'rxjs'; // nur solange dummy_token benutzt wird
 
 const httpOptions = {
@@ -32,4 +33,15 @@ export class TaskService {
   postAddEvent(postAddEventData: Object) {
     return this.http.post('http://localhost:8090/api/event', postAddEventData);
   }
+
+  getEventListData(eventListData: any): Observable<any> {
+    const params = {
+      token: eventListData.token,
+      startDate: eventListData.startDate.toISOString().split('T')[0],
+      endDate: eventListData.endDate.toISOString().split('T')[0]
+    };
+
+    return this.http.get('http://localhost:8090/api/event', { params });
+  }
+
 }

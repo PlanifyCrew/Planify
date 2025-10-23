@@ -13,27 +13,34 @@ import { HttpClientModule } from '@angular/common/http';
 })
 
 export class AddEvent implements OnInit {
-  title: string = '';
-  date: string = '';
-  description: string = '';
-  startTime: string = '';
-  endTime: string = '';
+  titel: string = '';
+  datum: string = '';
+  beschreibung: string = '';
+  startZeit: string = '';
+  endeZeit: string = '';
+  tnListe: string[] = [];
+  tn: string = '';
 
   constructor(private taskService: TaskService) { }
   ngOnInit() { }
 
   addEvent(): void {
-    alert('Adding event ' + this.title + ' on ' + this.date + ' from ' + this.startTime + ' to ' + this.endTime + ' description: ' + this.description);
+    alert('Adding event ' + this.titel + ' on ' + this.datum + ' from ' + this.startZeit + ' to ' + this.endeZeit + ' description: ' + this.beschreibung);
 
-    let event = {
-      title: this.title,
-      date: this.date,
-      description: this.description,
-      startTime: this.startTime,
-      endTime: this.endTime
+    let data = {
+      token: "123",
+      event: {
+        name: this.titel,
+        date: this.datum,
+        description: this.beschreibung,
+        startTime: this.startZeit,
+        endTime: this.endeZeit
+      },
+      tnListe: this.tnListe
     };
+    console.log(data);
 
-    this.taskService.postAddEvent(event).subscribe(
+    this.taskService.postAddEvent(data).subscribe(
       data => {
         console.log(data);
       },
@@ -41,4 +48,12 @@ export class AddEvent implements OnInit {
       () => console.log('Add event complete.')
     );
   }
+
+
+  addParticipant(): void {
+  if (this.tn.trim()) {
+    this.tnListe.push(this.tn.trim());
+    this.tn = ''; // Input zurücksetzen
+  }
+}
 }

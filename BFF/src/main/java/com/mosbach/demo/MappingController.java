@@ -6,12 +6,15 @@ import com.mosbach.demo.data.impl.*;
 import com.mosbach.demo.model.alexa.AlexaRO;
 import com.mosbach.demo.model.alexa.OutputSpeechRO;
 import com.mosbach.demo.model.alexa.ResponseRO;
+import com.mosbach.demo.model.event.Event;
 import com.mosbach.demo.model.event.TokenEvent;
 import com.mosbach.demo.model.user.Token;
 import com.mosbach.demo.model.user.TokenAnswer;
 import com.mosbach.demo.model.user.User;
 import com.mosbach.demo.model.task.*;
 import com.mosbach.demo.model.user.UserWithName;
+
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -28,7 +31,7 @@ import software.amazon.awssdk.regions.Region;
 import com.mosbach.demo.data.impl.PostgresTaskManagerImpl;
 import com.mosbach.demo.data.impl.PostgresUserManagerImpl;
 
-
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -184,6 +187,27 @@ public class MappingController {
         }
 
         return new com.mosbach.demo.model.user.MessageAnswer("Event created.");
+    }
+
+
+    @GetMapping("/event")
+    public List<Event> getEventList(@RequestParam(value = "token", defaultValue = "123") String token,
+                                    @RequestParam(value = "startDate") LocalDate startDate,
+                                    @RequestParam(value = "endDate") LocalDate endDate) {
+
+        Logger myLogger = Logger.getLogger("EventLogger");
+        myLogger.info("Received a GET request on event with token " + token);
+
+        int userId = pgUserManager.getUserIdFromToken(token);
+        List<com.mosbach.demo.data.api.Event> events = pgEventManager.getAllEventsPerUserId(userId);
+        List<Event> result = new ArrayList<>();
+
+        for (com.mosbach.demo.data.api.Event e : events)
+            if (e.getDate().isAfter(startDate) && e.getDate().isBefore(endDate)) {
+                result.add(new Event(e.getName(), e.getDate(), e.getDescription(), e.getStartTime(), e.getEndTime()));
+            }
+
+        return result;
     }
 
 

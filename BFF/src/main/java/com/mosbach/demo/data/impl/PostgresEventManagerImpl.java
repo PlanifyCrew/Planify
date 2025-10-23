@@ -46,7 +46,9 @@ public class PostgresEventManagerImpl implements EventManager  {
         List<Event> events = new ArrayList<>();
         //Statement stmt = null;
         //Connection connection = null;
-        String sql = "SELECT * FROM events WHERE user_id = ?";
+        String sql = "SELECT e.* FROM events e " +
+                     "JOIN participants p ON e.event_id = p.event_id " +
+                     "WHERE p.user_id = ?";
 
         try (Connection connection = basicDataSource.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
