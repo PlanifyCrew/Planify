@@ -128,3 +128,17 @@ button {
     left: -800px;
     transition: 0.5s;
 }
+
+#error-message {
+    display: none;
+    color: #ff4d4d;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+#error-message.show {
+    display: block;
+    opacity: 1;
+}

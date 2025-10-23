@@ -22,8 +22,10 @@ formLogin.addEventListener("submit", function (event) {
             localStorage.setItem("dummy_token", data.token);
 
             // Weiterleitung zur Homepage, wenn Login-Daten korrekt sind
-            if (data && data.token)
+            if (data.token !== "OFF")
                 window.location.href = "../home/home.html";
+            else
+                showErrorMessage();
         } else {
             // Handle login error
             console.error('Login failed');
@@ -35,6 +37,7 @@ formLogin.addEventListener("submit", function (event) {
     })
     .catch(error => {
         console.error('Login-Error:', error);
+        showErrorMessage();
     });
 });
 
@@ -75,11 +78,5 @@ formSignUp.addEventListener("submit", function (event) {
 
 function showErrorMessage() {
     let errorMessage = document.getElementById("error-message");
-    errorMessage.style.display = "block";
     errorMessage.classList.add("show");
-
-    setTimeout(() => {
-        errorMessage.classList.remove("show");
-        errorMessage.style.display = "none";
-    }, 3000);
 }
