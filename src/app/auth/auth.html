@@ -11,16 +11,16 @@
     <div class="container">
         <form id="login" class="section-input">
             <h1>Login</h1>
-                <input type="email" class="input" placeholder="Email" required>
-                <input type="password" class="input" placeholder="Password" required>
+                <input type="email" class="input" [(ngModel)]="email" placeholder="Email" required>
+                <input type="password" class="input" [(ngModel)]="password" placeholder="Password" required>
                 <button type="submit" class="submit-btn" (click)="login()">Login</button>
                 <div id="error-message" *ngIf="loginError">{{ loginError }}</div>
         </form>
         <form id="signup" class="section-input">
             <h1>Sign Up</h1>
-                <input type="text" class="input" placeholder="Name" required>
-                <input type="email" class="input" placeholder="Email" required>
-                <input type="password" class="input" placeholder="Password" required>
+                <input type="text" class="input" [(ngModel)]="name" placeholder="Name" required>
+                <input type="email" class="input" [(ngModel)]="email" placeholder="Email" required>
+                <input type="password" class="input" [(ngModel)]="password" placeholder="Password" required>
                 <button type="submit" class="submit-btn" (click)="signUp()">Sign Up</button>   
         </form>
         <div id="over-login" class="section-change">

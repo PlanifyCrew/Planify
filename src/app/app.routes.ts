@@ -10,6 +10,10 @@ export const routes: Routes = [
     path: 'auth',
     loadComponent: () => import('./auth/auth').then(m => m.Auth)
   },
+  {
+    path: 'add-event',
+    loadComponent: () => import('./home/Add-Event/Add-Event').then(m => m.AddEvent)
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
