@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
@@ -24,6 +25,11 @@ export class HomeComponent {
       right: 'dayGridMonth,dayGridWeek,dayGridDay'
     },
     dateClick: (info) => alert(`Datum geklickt: ${info.dateStr}`),
-    events: [{ title: 'Meeting', date: new Date().toISOString().slice(0, 10) }]
+    events: [{ title: 'Meeting', date: new Date().toISOString().slice(0, 10) }] 
   };
-}
+  constructor(private router: Router) {}
+
+  logout() {
+    this.router.navigateByUrl('/auth');
+  }
+} 
