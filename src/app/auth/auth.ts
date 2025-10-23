@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../data/task-service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule, HttpClientModule],
+  imports: [FormsModule, HttpClientModule, CommonModule],
   templateUrl: './auth.html',
   styleUrls: ['./auth.css'],
   providers: [TaskService]
@@ -21,6 +22,7 @@ export class Auth implements OnInit {
   constructor(private taskService: TaskService) { }
   ngOnInit() { }
 
+  loginError: string | null = null;
   login(): void {
     alert('Logging in ' + this.email + ' password ' + this.password);
 
@@ -33,9 +35,19 @@ export class Auth implements OnInit {
       data => {
         this.token = data;
         console.log(this.token);
-        localStorage.setItem('dummy_token', this.token.token);
+
+        if (this.token && this.token.token) {
+          localStorage.setItem('dummy_token', this.token.token);
+          this.loginError = null; // Erfolgreich → keine Fehlermeldung
+          window.location.href = '../home/home.html';
+        } else {
+          this.loginError = 'Fehler! Falsche Email oder Passwort!'; // Fehlermeldung setzen
+        }
       },
-      err => console.log('Could not reach heroku.'),
+      err => {
+        console.log('Could not reach heroku.'),
+        this.loginError = 'Fehler! Falsche Email oder Passwort!'; // Fehlermeldung setzen
+      },
       () => console.log('Login complete.')
     );
   }
