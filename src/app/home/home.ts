@@ -54,13 +54,23 @@ export class HomeComponent {
 
 
   logout() {
+    let token = { token: localStorage.getItem('auth_token') };
+
+    this.taskService.postUserLogOut(token).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => console.log('Could not reach server.'),
+      () => console.log('Logout complete.')
+    );
+    localStorage.removeItem('auth_token');
     this.router.navigateByUrl('/auth');
   }
 
 
   getEventList(startDate: Date, endDate: Date): void {
     // Hier kann der Token für die Authentifizierung hinzugefügt werden
-    const token = '123';
+    const token = localStorage.getItem('auth_token');
 
     let eventListData = {
       token: token,

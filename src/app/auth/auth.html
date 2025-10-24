@@ -1,41 +1,33 @@
-<!DOCTYPE html>
-<html lang="de" >
-<head>
-    <meta charset="UTF-8">
-    <title>Animated Log In and Sign Up Form</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="auth.css">
-</head>
-<body>
+<main class="section-main">
     <img src="Planify_logo.png">
     <div class="container">
         <form id="login" class="section-input">
             <h1>Login</h1>
-                <input type="email" class="input" [(ngModel)]="email" placeholder="Email" required>
-                <input type="password" class="input" [(ngModel)]="password" placeholder="Password" required>
-                <button type="submit" class="submit-btn" (click)="login()">Login</button>
+                <input type="email" class="input" name="email" [(ngModel)]="email" placeholder="Email" required>
+                <input type="password" class="input" name="password" [(ngModel)]="password" placeholder="Password" required>
+                <button type="button" class="submit-btn" (click)="login()">Login</button>
                 <div id="error-message" *ngIf="loginError">{{ loginError }}</div>
         </form>
         <form id="signup" class="section-input">
             <h1>Sign Up</h1>
-                <input type="text" class="input" [(ngModel)]="name" placeholder="Name" required>
-                <input type="email" class="input" [(ngModel)]="email" placeholder="Email" required>
-                <input type="password" class="input" [(ngModel)]="password" placeholder="Password" required>
-                <button type="submit" class="submit-btn" (click)="signUp()">Sign Up</button>   
+                <input type="text" class="input" name="name" [(ngModel)]="name" placeholder="Name" required>
+                <input type="email" class="input" name="email" [(ngModel)]="email" placeholder="Email" required>
+                <input type="password" class="input" name="password" [(ngModel)]="password" placeholder="Password" required>
+                <button type="button" class="submit-btn" (click)="signUp()">Sign Up</button>   
         </form>
         <div id="over-login" class="section-change">
             <h1>Willkommen zurück!</h1>
             <p>Du hast noch keinen Account?</p>
-            <button type="button" class="page-btn"  onclick="changeToSignup()">Sign Up</button>
+            <button type="button" class="page-btn" (click)="changeToSignup()">Sign Up</button>
         </div>
         <div id="over-signup" class="section-change">
             <h1>Schön dich zu sehen!</h1>
             <p>Du hast schon einen Account?</p> 
-            <button type="button" class="page-btn"  onclick="changeToLogin()">Login</button>               
+            <button type="button" class="page-btn" (click)="changeToLogin()">Login</button>               
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         var x = document.getElementById("login");
         var y = document.getElementById("signup");
         var z = document.getElementById("over-login");
@@ -54,6 +46,5 @@
             z.style.left = "420px";
             a.style.left = "-900px";
         }
-    </script>
-</body>
-</html>
+    </script> -->
+</main>
