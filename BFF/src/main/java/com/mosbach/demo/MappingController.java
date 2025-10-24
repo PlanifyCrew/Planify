@@ -81,8 +81,8 @@ public class MappingController {
     }
 
 
-    @DeleteMapping(
-            path = "/login",
+    @PostMapping(
+            path = "/logout",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
@@ -93,7 +93,7 @@ public class MappingController {
 
         boolean couldLogoffUser =
                 //userManager.logUserOff(userManager.getUserEmailFromToken(token.getToken()));
-                pgUserManager.logUserOff("dummy");
+                pgUserManager.logUserOff(token.getToken());
 
         myLogger.info("User logged off " + couldLogoffUser);
 
@@ -199,13 +199,11 @@ public class MappingController {
         myLogger.info("Received a GET request on event with token " + token);
 
         int userId = pgUserManager.getUserIdFromToken(token);
-        List<com.mosbach.demo.data.api.Event> events = pgEventManager.getAllEventsPerUserId(userId);
+        List<com.mosbach.demo.data.api.Event> events = pgEventManager.getAllEventsPerUserId(userId, startDate, endDate);
         List<Event> result = new ArrayList<>();
 
         for (com.mosbach.demo.data.api.Event e : events)
-            if (e.getDate().isAfter(startDate) && e.getDate().isBefore(endDate)) {
-                result.add(new Event(e.getName(), e.getDate(), e.getDescription(), e.getStartTime(), e.getEndTime()));
-            }
+            result.add(new Event(e.getName(), e.getDate(), e.getDescription(), e.getStartTime(), e.getEndTime()));
 
         return result;
     }

@@ -28,7 +28,7 @@ export class AddEvent implements OnInit {
     alert('Adding event ' + this.titel + ' on ' + this.datum + ' from ' + this.startZeit + ' to ' + this.endeZeit + ' description: ' + this.beschreibung);
 
     let data = {
-      token: "123",
+      token: localStorage.getItem('auth_token'),
       event: {
         name: this.titel,
         date: this.datum,

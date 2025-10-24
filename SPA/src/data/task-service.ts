@@ -26,6 +26,10 @@ export class TaskService {
  //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/login
   }
 
+  postUserLogOut(postUserLogOutData: Object) {
+    return this.http.post('http://localhost:8090/api/logout', postUserLogOutData);
+  }
+
   postUserSignUp(postUserSignUpData: Object) {
     return this.http.post('http://localhost:8090/api/user', postUserSignUpData);
   }

@@ -19,7 +19,7 @@ formLogin.addEventListener("submit", function (event) {
             console.log('Login successful');
             console.log("Antwort vom Backend:", data); // z. B. {token: "...", code: "200"}
             // Token lokal speichern
-            localStorage.setItem("dummy_token", data.token);
+            localStorage.setItem("auth_token", data.token);
 
             // Weiterleitung zur Homepage, wenn Login-Daten korrekt sind
             if (data.token !== "OFF")

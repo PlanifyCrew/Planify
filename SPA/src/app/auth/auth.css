@@ -1,8 +1,7 @@
-body {
+.section-main {
     display: flex;
     justify-content: center;
-    background-color: #152B51;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 img {
@@ -63,8 +62,9 @@ button {
     border-radius: 5px;
     margin-left: 50%;
     transform: translateX(-50%);
-    position: absolute;
-    top: 340px;
+    /*position: absolute;*/
+    /*top: 340px;*/
+    margin-top: 1.5rem;
 }
 
 .submit-btn {
@@ -130,15 +130,14 @@ button {
 }
 
 #error-message {
-    display: none;
     color: #ff4d4d;
     margin-top: 10px;
     font-size: 0.9rem;
     font-weight: bold;
     text-align: center;
 }
-
+/*
 #error-message.show {
     display: block;
     opacity: 1;
-}
+} */

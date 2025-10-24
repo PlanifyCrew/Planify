@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -138,12 +139,12 @@ public class PostgresUserManagerImpl implements UserManager {
 
         int userId = rs.getInt("user_id");
 
-        // Token setzen
-        String newToken = "123";
+        // Token generieren
+        String token = UUID.randomUUID().toString();
 
         String updateSQL = "UPDATE users SET token = ? WHERE user_id = ?";
         try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
-            updateStmt.setString(1, newToken);
+            updateStmt.setString(1, token);
             updateStmt.setInt(2, userId);
             updateStmt.executeUpdate();
         }
@@ -151,8 +152,8 @@ public class PostgresUserManagerImpl implements UserManager {
         if (!conn.getAutoCommit())
             conn.commit();
 
-        logOnUserLogger.info("Login successful, token generated: " + newToken);
-        return newToken;
+        logOnUserLogger.info("Login successful, token generated: " + token);
+        return token;
 
         } catch (SQLException e) {
             logOnUserLogger.log(Level.SEVERE, "SQL Exception occurred: " + e.getMessage(), e);
@@ -185,25 +186,23 @@ public class PostgresUserManagerImpl implements UserManager {
     }
 
     @Override
-    public boolean logUserOff(String email) {
+    public boolean logUserOff(String token) {
         final Logger logOffUserLogger = Logger.getLogger("logOffUserLogger");
-        logOffUserLogger.log(Level.INFO,"Start logging off user " + email);
+        logOffUserLogger.log(Level.INFO,"Start logging off user with token " + token);
         //Statement stmt = null;
         //Connection connection = null;
 
-        String updateSQL = "UPDATE users SET token = ? WHERE email = ?";
+        String updateSQL = "UPDATE users SET token = ? WHERE token = ?";
 
         try (Connection connection = basicDataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(updateSQL)) {
             
             stmt.setString(1, "OFF");
-            stmt.setString(2, email);
+            stmt.setString(2, token);
             int rows = stmt.executeUpdate();
 
             if (!connection.getAutoCommit())
                 connection.commit();
-
-            logOffUserLogger.info("User logged off " + email);
 
             // Bei Erfolg true zurückgeben
             if (rows >= 1)

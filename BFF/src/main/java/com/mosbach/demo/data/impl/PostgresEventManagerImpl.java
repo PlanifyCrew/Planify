@@ -39,7 +39,7 @@ public class PostgresEventManagerImpl implements EventManager  {
 
 
     @Override
-    public List<Event> getAllEventsPerUserId(int user_id) {
+    public List<Event> getAllEventsPerUserId(int user_id, LocalDate startDate, LocalDate endDate) {
         final Logger readEventLogger = Logger.getLogger("ReadEventLogger");
         readEventLogger.log(Level.INFO,"Start reading events from DB. ");
 
@@ -50,9 +50,21 @@ public class PostgresEventManagerImpl implements EventManager  {
                      "JOIN participants p ON e.event_id = p.event_id " +
                      "WHERE p.user_id = ?";
 
+        // Datumsfilter hinzufügen (für monatliche Kalendersicht)
+        if (startDate != null && endDate != null)
+            sql += " AND e.date BETWEEN ? AND ?";
+
         try (Connection connection = basicDataSource.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
             pstmt.setInt(1, user_id);
+
+            // Datumsfilter hinzufügen (für monatliche Kalendersicht)
+            if (startDate != null && endDate != null) {
+                pstmt.setObject(2, startDate);
+                pstmt.setObject(3, endDate);
+            }
+
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
