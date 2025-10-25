@@ -137,6 +137,34 @@ public class PostgresEventManagerImpl implements EventManager  {
         return event_id;
     }
 
+
+    @Override
+    public boolean updateEvent(int event_id, Event event) {
+        final Logger updateEventLogger = Logger.getLogger("UpdateEventLogger");
+        updateEventLogger.log(Level.INFO,"Start updating event " + event.getName());
+
+        String sql = "UPDATE events SET name = ?, date = ?, description = ?, start_time = ?, end_time = ? WHERE event_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1, event.getName());
+            pstmt.setObject(2, event.getDate());
+            pstmt.setString(3, event.getDescription());
+            pstmt.setObject(4, event.getStartTime());
+            pstmt.setObject(5, event.getEndTime());
+            pstmt.setInt(6, event_id);
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public void createTaskTable() {
         // Be carefull: It deletes data if table already exists.
         Statement stmt = null;
@@ -162,6 +190,78 @@ public class PostgresEventManagerImpl implements EventManager  {
             e.printStackTrace();
         }
 
+    }
+
+
+    @Override
+    public boolean deleteEvent(int event_id) {
+        final Logger deleteEventLogger = Logger.getLogger("DeleteEventLogger");
+        deleteEventLogger.log(Level.INFO,"Start deleting event with ID " + event_id);
+
+        String sql = "DELETE FROM events WHERE event_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection()) {
+
+            // Transaktion starten
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+                pstmt.setInt(1, event_id);
+                int affectedRows = pstmt.executeUpdate();
+
+                if (affectedRows > 0) {
+                    String sql_part = "DELETE FROM participants WHERE event_id = ?";
+                    try (PreparedStatement psPart = connection.prepareStatement(sql_part)) {
+
+                        psPart.setInt(1, event_id);
+                        psPart.executeUpdate();
+                    }
+                }
+            }
+        
+        // alles commiten
+        connection.commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public List<com.mosbach.demo.model.teilnehmer.Teilnehmerliste> getParticipants(int event_id) {
+        final Logger getParticipantsLogger = Logger.getLogger("GetParticipantsLogger");
+        getParticipantsLogger.log(Level.INFO,"Start getting participants for event " + event_id);
+
+        List<com.mosbach.demo.model.teilnehmer.Teilnehmerliste> participants = new ArrayList<>();
+
+        String sql = "SELECT * FROM participants WHERE event_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, event_id);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                com.mosbach.demo.model.teilnehmer.Teilnehmerliste pList = new com.mosbach.demo.model.teilnehmer.Teilnehmerliste(
+                        rs.getInt("event_id"),
+                        rs.getInt("user_id"),
+                        rs.getString("role"),
+                        rs.getString("status")
+                );
+                participants.add(pList);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return participants;
     }
 
 
@@ -195,6 +295,40 @@ public class PostgresEventManagerImpl implements EventManager  {
         } catch (SQLException e) {
             e.printStackTrace();
             return  false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public boolean removeParticipants(int event_id, List<Integer> user_ids) {
+        final Logger removeParticipantLogger = Logger.getLogger("RemoveParticipantLogger");
+        removeParticipantLogger.log(Level.INFO,"Start removing participants from event " + event_id);
+
+        String sql = "DELETE FROM participants WHERE event_id = ? AND user_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            for (int user_id : user_ids) {
+                pstmt.setInt(1, event_id);
+                pstmt.setInt(2, user_id);
+                pstmt.addBatch();
+            }
+
+            int[] results = pstmt.executeBatch();
+            for (int result : results) {
+                if (result == PreparedStatement.SUCCESS_NO_INFO || result > 0) {
+                    // Erfolgreich entfernt
+                } else {
+                    // Fehler beim Entfernen
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
 
         return true;

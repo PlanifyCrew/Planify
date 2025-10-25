@@ -2,6 +2,7 @@ package com.mosbach.demo;
 
 import com.mosbach.demo.data.api.TaskManager;
 import com.mosbach.demo.data.api.UserManager;
+// Variante Postgres
 import com.mosbach.demo.data.impl.*;
 import com.mosbach.demo.model.alexa.AlexaRO;
 import com.mosbach.demo.model.alexa.OutputSpeechRO;
@@ -12,6 +13,7 @@ import com.mosbach.demo.model.user.Token;
 import com.mosbach.demo.model.user.TokenAnswer;
 import com.mosbach.demo.model.user.User;
 import com.mosbach.demo.model.task.*;
+import com.mosbach.demo.model.teilnehmer.Teilnehmerliste;
 import com.mosbach.demo.model.user.UserWithName;
 
 import org.springframework.cglib.core.Local;
@@ -27,15 +29,14 @@ import software.amazon.awssdk.services.sqs.*;
 import software.amazon.awssdk.services.sqs.model.*;
 import software.amazon.awssdk.regions.Region;
 
-// Variante Postgres
-import com.mosbach.demo.data.impl.PostgresTaskManagerImpl;
-import com.mosbach.demo.data.impl.PostgresUserManagerImpl;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -190,6 +191,71 @@ public class MappingController {
     }
 
 
+    @PutMapping(
+            path = "/event/{event_id}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public com.mosbach.demo.model.user.MessageAnswer updateEvent(@PathVariable("event_id") int event_id,
+                                                                 @RequestBody TokenEvent tokenEvent) {
+
+        Logger myLogger = Logger.getLogger("UpdateEvent");
+        myLogger.info("Received a PUT request on event with token " + tokenEvent.getToken());
+
+        int userId = pgUserManager.getUserIdFromToken(tokenEvent.getToken());
+        myLogger.info("Found the following userId for this token " + userId);
+        if (userId == -1)
+            return new com.mosbach.demo.model.user.MessageAnswer("No user found or not logged on.");
+
+        EventImpl eventImpl = new EventImpl(
+                                event_id,
+                                tokenEvent.getEvent().getName(),
+                                tokenEvent.getEvent().getDate(),
+                                tokenEvent.getEvent().getDescription(),
+                                tokenEvent.getEvent().getStartTime(),
+                                tokenEvent.getEvent().getEndTime()
+                        );
+
+        boolean updated = pgEventManager.updateEvent(event_id, eventImpl);
+
+        if (updated) {
+            myLogger.info("Event updated " + eventImpl.getEventId());
+
+            List<Integer> user_ids = pgUserManager.getUserIdsFromEmails(tokenEvent.getTnListe());
+            List<Teilnehmerliste> currentParticipants = pgEventManager.getParticipants(event_id);
+
+            // Änderungen des Users: Teilnehmer hinzufügen bzw. löschen
+            // 1. Sets zur effizienten Differenzbildung
+            Set<Integer> newUserIds = new HashSet<>(user_ids);
+            Set<Integer> currentUserIds = currentParticipants.stream()
+                    .map(Teilnehmerliste::getUserId)
+                    .collect(Collectors.toSet());
+
+            // 2. Teilnehmer, die hinzugefügt werden müssen
+            List<Integer> toAdd = new ArrayList<>(newUserIds);
+            toAdd.removeAll(currentUserIds);
+
+            // 3. Teilnehmer, die entfernt werden müssen
+            List<Integer> toRemove = new ArrayList<>(currentUserIds);
+            toRemove.removeAll(newUserIds);
+
+            // 4. Service-Aufrufe
+            if (!toAdd.isEmpty()) {
+                pgEventManager.addParticipants(event_id, toAdd);
+            }
+
+            if (!toRemove.isEmpty()) {
+                pgEventManager.removeParticipants(event_id, toRemove);
+            } 
+        }
+        else {
+            myLogger.info("Event could not be updated " + eventImpl.getEventId());
+        }
+
+        return new com.mosbach.demo.model.user.MessageAnswer("Event updated.");
+    }
+
+
     @GetMapping("/event")
     public List<Event> getEventList(@RequestParam(value = "token", defaultValue = "123") String token,
                                     @RequestParam(value = "startDate") LocalDate startDate,
@@ -206,6 +272,32 @@ public class MappingController {
             result.add(new Event(e.getName(), e.getDate(), e.getDescription(), e.getStartTime(), e.getEndTime()));
 
         return result;
+    }
+
+
+    @DeleteMapping("/event/{event_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public com.mosbach.demo.model.user.MessageAnswer deleteEvent(@PathVariable("event_id") int event_id,
+                                                                 @RequestParam(value = "token", defaultValue = "OFF") String token) {
+
+        Logger myLogger = Logger.getLogger("DeleteEvent");
+        myLogger.info("Received a DELETE request on event with token " + token);
+
+        int userId = pgUserManager.getUserIdFromToken(token);
+        myLogger.info("Found the following userId for this token " + userId);
+        if (userId == -1)
+            return new com.mosbach.demo.model.user.MessageAnswer("No user found or not logged on.");
+
+        boolean deleted = pgEventManager.deleteEvent(event_id);
+
+        if (deleted) {
+            myLogger.info("Event deleted " + event_id);
+        }
+        else {
+            myLogger.info("Event could not be deleted " + event_id);
+        }
+
+        return new com.mosbach.demo.model.user.MessageAnswer("Event deleted.");
     }
 
 

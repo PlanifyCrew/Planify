@@ -1,6 +1,5 @@
 
 package com.mosbach.demo.model.event;
-import com.mosbach.demo.model.teilnehmer.TeilnehmerListe;
 
 import java.util.LinkedHashMap;
 import java.util.List;

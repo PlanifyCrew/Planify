@@ -2,7 +2,6 @@ package com.mosbach.demo.data.impl;
 
 import com.mosbach.demo.data.api.User;
 import com.mosbach.demo.data.api.UserManager;
-import com.mosbach.demo.model.teilnehmer.TeilnehmerListe;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
