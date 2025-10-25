@@ -1,7 +1,5 @@
 # Node & Frontend
 node_modules/
-package-lock.json
-package.json
 
 # VSCode
 .vscode/
