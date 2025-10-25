@@ -4,7 +4,6 @@ import com.mosbach.demo.data.api.Event;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import org.springframework.cglib.core.Local;
 
 public class EventImpl implements Event {
 

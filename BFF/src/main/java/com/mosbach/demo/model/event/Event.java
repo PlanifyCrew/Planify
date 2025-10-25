@@ -2,10 +2,7 @@
 package com.mosbach.demo.model.event;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.springframework.cglib.core.Local;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

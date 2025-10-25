@@ -1,6 +1,5 @@
 package com.mosbach.demo.data.api;
 
-import org.springframework.cglib.core.Local;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

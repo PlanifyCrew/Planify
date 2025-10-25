@@ -2,11 +2,8 @@ package com.mosbach.demo.data.impl;
 
 import com.mosbach.demo.data.api.Task;
 import com.mosbach.demo.data.api.TaskManager;
-import com.mosbach.demo.model.user.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -16,18 +16,10 @@ import com.mosbach.demo.model.task.*;
 import com.mosbach.demo.model.teilnehmer.Teilnehmerliste;
 import com.mosbach.demo.model.user.UserWithName;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 //import software.amazon.awssdk.*;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.services.sqs.*;
-import software.amazon.awssdk.services.sqs.model.*;
-import software.amazon.awssdk.regions.Region;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -434,7 +426,7 @@ public class MappingController {
     )
     public AlexaRO getTasks(@RequestBody AlexaRO alexaRO) {
 
-        String outText = "";
+        //String outText = "";
 
 
         return alexaRO;
