@@ -6,9 +6,9 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'dist/frontend')));
 
 // Alle anderen Routen auf index.html umleiten
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/frontend', 'index.html'));
-});
+app.get('/', (req, res) =>
+  res.sendFile('index.html', { root: 'SPA/browser/' }),
+);
 
 // Heroku-Port nutzen
 const PORT = process.env.PORT || 8080;
