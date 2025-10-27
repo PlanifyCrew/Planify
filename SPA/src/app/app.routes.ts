@@ -4,6 +4,11 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'auth',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
     loadComponent: () => import('./home/home').then(m => m.HomeComponent)
   },
   {
@@ -14,6 +19,6 @@ export const routes: Routes = [
     path: 'add-event',
     loadComponent: () => import('./home/Add-Event/Add-Event').then(m => m.AddEvent)
   },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: '**', redirectTo: 'auth', pathMatch: 'full' }
 ];
 
