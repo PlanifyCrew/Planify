@@ -1,0 +1,21 @@
+type Query {
+    eventById(id: ID): Event
+    userById(id: ID): User
+    eventsByUserId(id: ID): [Event]
+}
+
+type Event {
+    id: ID
+    name: String
+    description: String
+    priority: Int
+    user: User
+
+}
+
+type User {
+    id: ID
+    firstName: String
+    lastName: String
+    events: [Event]
+}
