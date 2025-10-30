@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 
 // Absoluter Pfad zum SPA Build
-const staticPath = path.join(__dirname, 'dist', 'frontend');
+const staticPath = path.join(__dirname, 'dist', 'frontend', 'browser');
 
 // Statische Dateien bereitstellen
 app.use(express.static(staticPath));
