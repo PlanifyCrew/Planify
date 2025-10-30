@@ -48,4 +48,10 @@ export class TaskService {
     return this.http.get('http://localhost:8090/api/event', { params });
   }
 
+  postAddUser(postAddUserData: Object) {
+    //return of({ token: 'dummy_token_123' });
+    return this.http.post('http://localhost:8090/api/sendEmail', postAddUserData);
+    //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/addevent
+  }
+
 }
