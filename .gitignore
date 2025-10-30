@@ -12,3 +12,9 @@ BFF/.gradle/
 # Sonstige temporäre Dateien
 dist/
 build/
+
+# Java
+/bin/
+/target/
+/out/
+/*.class
