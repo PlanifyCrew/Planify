@@ -1,7 +1,5 @@
 # Node & Frontend
 node_modules/
-package-lock.json
-package.json
 
 # VSCode
 .vscode/
@@ -10,8 +8,55 @@ package.json
 BFF/.gradle/
 
 # Sonstige temporäre Dateien
-dist/
 build/
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+__screenshots__/
+
+# System files
+.DS_Store
+Thumbs.db
+
+
+node_modules/
+.vscode/
+BFF/.gradle/
+BFF/src/main/email/.env
 
 # Java
 /bin/

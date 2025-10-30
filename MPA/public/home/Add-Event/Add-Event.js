@@ -10,7 +10,7 @@ document.getElementById("speichern").addEventListener("click", async () => {
     const endeZeit = document.getElementById("endeZeit").value;
 
     // Beispiel-Token (normalerweise aus Login speichern)
-    const token = localStorage.getItem("userToken") || "123";
+    const token = localStorage.getItem("auth_token");
 
     // Anfrage-Daten vorbereiten
     const data = {
