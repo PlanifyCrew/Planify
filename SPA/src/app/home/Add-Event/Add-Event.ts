@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+
 import { TaskService } from '../../../data/task-service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-Add-Event',
@@ -13,6 +14,9 @@ import { HttpClientModule } from '@angular/common/http';
 })
 
 export class AddEvent implements OnInit {
+  @Input() visible: boolean = false;            
+  @Output() closed = new EventEmitter<void>();
+
   titel: string = '';
   datum: string = '';
   beschreibung: string = '';
@@ -47,6 +51,8 @@ export class AddEvent implements OnInit {
       err => console.log('Could not reach server.'),
       () => console.log('Add event complete.')
     );
+
+     this.closed.emit();
   }
 
 
@@ -56,4 +62,8 @@ export class AddEvent implements OnInit {
     this.tn = ''; // Input zurücksetzen
   }
 }
+
+ closePopup(): void { 
+    this.closed.emit();
+ }
 }

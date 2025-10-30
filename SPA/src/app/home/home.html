@@ -1,7 +1,6 @@
-
 <header class="header">
   <div class="logo">
-    <img src="../../../public/Planify_logo.png">
+    <img src="../../../public/Planify_logo.png" />
     <h1>Planify</h1>
   </div>
   <button class="logout-btn" (click)="logout()">Logout</button>
@@ -9,13 +8,15 @@
 
 <main class="main-content">
   <div class="greeting">
-    <h2>Hello!</h2>
-    
+    <h2>Hello, {{ Name }}!</h2>
   </div>
 
   <div class="home-container">
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
 
-  <full-calendar #calendar [options]="calendarOptions"></full-calendar>
-
-</div>
+    <app-Add-Event
+      *ngIf="showAddEventPopup"
+      (closed)="onClosePopup()">
+    </app-Add-Event>
+  </div>
 </main>

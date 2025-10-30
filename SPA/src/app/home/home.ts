@@ -1,43 +1,54 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf} from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { TaskService } from '../../data/task-service';
+import { AddEvent } from './Add-Event/Add-Event';
+
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule],
+  imports: [CommonModule, FullCalendarModule, AddEvent, NgIf],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
   providers: [TaskService]
 })
 
 export class HomeComponent {
+
+  
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
 
   Name = 'Planify User';
 
-  calendarOptions: CalendarOptions = {
-    initialView: 'dayGridMonth',
-    plugins: [dayGridPlugin, interactionPlugin],
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,dayGridWeek,dayGridDay'
-    },
-    dateClick: (info) => alert(`Datum geklickt: ${info.dateStr}`),
-    events: [{ title: 'Meeting', date: new Date().toISOString().slice(0, 10) }],
+   showAddEventPopup = false;
 
-    //dynamisches Nachladen der Events bei Ansichtwechsel
-    datesSet: (info) => {
-      this.getEventList(info.start, info.end);
-    }
-  };
+ calendarOptions: CalendarOptions = {
+  initialView: 'dayGridMonth',
+  plugins: [dayGridPlugin, interactionPlugin],
+  headerToolbar: {
+    left: 'prev,next today',
+    center: 'title',
+    right: 'dayGridMonth,dayGridWeek,dayGridDay'
+  },
+  dateClick: (info) => {
+    alert(`Datum geklickt: ${info.dateStr}`);
+    this.showAddEventPopup = true;
+  },
+  events: [{ title: 'Meeting', date: new Date().toISOString().slice(0, 10) }],
+
+  // Dynamisches Nachladen der Events bei Ansichtwechsel
+  datesSet: (info) => {
+    this.getEventList(info.start, info.end);
+  }
+};
+
 
   constructor(private router: Router, private taskService: TaskService) {}
 
@@ -102,4 +113,7 @@ export class HomeComponent {
       () => console.log('Get event list complete.'
     ));
   };
+  onClosePopup() {
+    this.showAddEventPopup = false;
+  }
 } 
