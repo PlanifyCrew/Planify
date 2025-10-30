@@ -188,7 +188,7 @@ public class MappingController {
     )
     @ResponseStatus(HttpStatus.OK)
     public com.planify.model.user.MessageAnswer updateEvent(@PathVariable("event_id") int event_id,
-                                                                 @RequestBody TokenEvent tokenEvent) {
+                                                            @RequestBody TokenEvent tokenEvent) {
 
         Logger myLogger = Logger.getLogger("UpdateEvent");
         myLogger.info("Received a PUT request on event with token " + tokenEvent.getToken());
@@ -269,7 +269,7 @@ public class MappingController {
     @DeleteMapping("/event/{event_id}")
     @ResponseStatus(HttpStatus.OK)
     public com.planify.model.user.MessageAnswer deleteEvent(@PathVariable("event_id") int event_id,
-                                                                 @RequestParam(value = "token", defaultValue = "OFF") String token) {
+                                                            @RequestParam(value = "token", defaultValue = "OFF") String token) {
 
         Logger myLogger = Logger.getLogger("DeleteEvent");
         myLogger.info("Received a DELETE request on event with token " + token);

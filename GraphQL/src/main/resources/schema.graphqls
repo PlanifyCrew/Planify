@@ -1,21 +1,38 @@
-type Query {
-    eventById(id: ID): Event
-    userById(id: ID): User
-    eventsByUserId(id: ID): [Event]
+type TokenAnswer {
+  token: String
+  status: String
+}
+
+type MessageAnswer {
+  message: String
 }
 
 type Event {
-    id: ID
-    name: String
-    description: String
-    priority: Int
-    user: User
-
+  id: ID!
+  name: String
+  date: String
+  description: String
+  startTime: String
+  endTime: String
 }
 
-type User {
-    id: ID
-    firstName: String
-    lastName: String
-    events: [Event]
+input EventInput {
+  name: String
+  date: String
+  description: String
+  startTime: String
+  endTime: String
+}
+
+type Query {
+  getEvents(token: String!, startDate: String!, endDate: String!): [Event]
+}
+
+type Mutation {
+  login(email: String!, password: String!): TokenAnswer
+  logout(token: String!): MessageAnswer
+  createUser(name: String!, email: String!, password: String!): MessageAnswer
+  addEvent(token: String!, event: EventInput!, tnListe: [String]!): MessageAnswer
+  updateEvent(eventId: ID!, token: String!, event: EventInput!, tnListe: [String]!): MessageAnswer
+  deleteEvent(eventId: ID!, token: String!): MessageAnswer
 }
