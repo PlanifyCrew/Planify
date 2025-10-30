@@ -60,30 +60,16 @@ export class AddEvent implements OnInit {
     alert ('Adding User to event' + this.titel + ' on ' + this.datum + ' from ' + this.startZeit + ' to ' + this.endeZeit + ' description: ' + this.beschreibung);
 
     let addUser = {
+      token: localStorage.getItem('auth_token'),
       email: this.tn,
-      name: this.titel,
-      date: this.datum,
-      description: this.beschreibung,
-      startTime: this.startZeit,
-      endTime: this.endeZeit
     }
 
     this.taskService.postAddUser(addUser).subscribe(
       data => {
-        this.token = data;
-        console.log(this.token);
-
-        if (this.token && (this.token.token != 'OFF')) {
-          localStorage.setItem('auth_token', this.token.token);
-          this.loginError = null; // Erfolgreich → keine Fehlermeldung
-          this.router.navigate(['/home']); // Navigation zur Home-Seite
-        } else {
-          this.loginError = 'Fehler! Falsche Email oder Passwort!'; // Fehlermeldung setzen
-        }
+        console.log(data)
       },
       err => {
-        console.log('Could not reach heroku.'),
-        this.loginError = 'Fehler! Falsche Email oder Passwort!'; // Fehlermeldung setzen
+        console.log('Could not reach heroku.')
       },
       () => console.log('Login complete.')
     );
