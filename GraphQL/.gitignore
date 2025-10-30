@@ -1,0 +1,20 @@
+/build/
+build/
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# From https://github.com/github/gitignore/blob/master/Java.gitignore
+*.class
+
+# Package Files #
+*.war
+*.ear
+# I do not want to push jar files, but the gradle-wrapper.jar is needed, we should manually include it
+# IntelliJ
+/out/
+.idea_modules/
+.idea
+.idea/
+bin
+bin/
