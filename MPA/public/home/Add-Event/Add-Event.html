@@ -29,11 +29,13 @@
                 </div>
             </form>
         </div>
-
-        <form class="users">
-                <input type="email" id="input-addUser" name="addUser" placeholder="Teilnehmer E-Mail">
-<!--                <button type="button" id="showUsers" >Teilnehmer anzeigen</button><br>-->
-                <button type="button" id="addUser">Hinzufügen</button>
+        
+        <div id="addUser-success">E-Mail erfolgreich an Teilnehmer gesendet.</div>
+        <div id="addUser-failed">E-Mail konnte nicht gesendet werden. Versuche es später erneut.</div>
+            
+        <form class="users"> 
+            <input type="email" id="input-addUser" name="addUser" placeholder="Teilnehmer E-Mail">
+            <button type="button" id="addUser-btn">Hinzufügen</button>
         </form>
 
         <div class="tabelle-user">
@@ -45,21 +47,28 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>test@test.de</td>
-                        <td><button type="submit" id="removeUser">X</button></td>
+                        <td id="output-addUser">test@test.dejkhdfghghhhhhdfbnjrbedjb- das hier sieht man nicht mehr</td>
+                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
                     </tr>
                     <tr>
-                        <td>test@test.de</td>
-                        <td><button type="submit" id="removeUser">X</button></td>
+                        <td id="output-addUser">test@test.de</td>
+                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
                     </tr>
                     <tr>
-                        <td>test@test.de</td>
-                        <td><button type="submit" id="removeUser">X</button></td>
+                        <td id="output-addUser">test@test.de</td>
+                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                    </tr>
+                    <tr>
+                        <td id="output-addUser">test@test.de</td>
+                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     
+        <div id="removedUser-success">Teilnehmer erfolgreich entfernt.</div>
+        <div id="removedUser-failed">Teilnehmer konnte nicht entfernt werden. Versuche es später erneut.</div>
+
         <button type="submit" id="verwerfen">Termin verwerfen</button>
         <button type="submit" id="speichern">Speichern</button>
         
