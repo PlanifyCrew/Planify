@@ -14,7 +14,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 
 export class AddEvent implements OnInit {
-  @Input() visible: boolean = false;            
+  @Input() visible: boolean = false;
+  @Input() eventData: any | null = null;
   @Output() closed = new EventEmitter<void>();
 
   titel: string = '';
@@ -52,18 +53,12 @@ export class AddEvent implements OnInit {
       () => console.log('Add event complete.')
     );
 
-     this.closed.emit();
-  }
-
-
-  addParticipant(): void {
-    alert ('Adding User to event' + this.titel + ' on ' + this.datum + ' from ' + this.startZeit + ' to ' + this.endeZeit + ' description: ' + this.beschreibung);
-
     let addUser = {
       token: localStorage.getItem('auth_token'),
-      email: this.tn,
+      tnListe: this.tnListe
     }
 
+    // Teilnehmer E-Mail-Benachrichtigung separat einfügen -> bessere Wartbarkeit
     this.taskService.postAddUser(addUser).subscribe(
       data => {
         console.log(data)
@@ -74,11 +69,15 @@ export class AddEvent implements OnInit {
       () => console.log('Login complete.')
     );
 
-  if (this.tn.trim()) {
-    this.tnListe.push(this.tn.trim());
-    this.tn = ''; // Input zurücksetzen
+     this.closed.emit();
   }
 
+
+  addParticipant(): void {
+    if (this.tn.trim()) {
+      this.tnListe.push(this.tn.trim());
+      this.tn = ''; // Input zurücksetzen
+    }
 }
 
  closePopup(): void { 

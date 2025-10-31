@@ -141,7 +141,8 @@ public class PostgresUserManagerImpl implements UserManager {
         // Token generieren
         String token = UUID.randomUUID().toString();
 
-        String updateSQL = "UPDATE users SET token = ? WHERE user_id = ?";
+
+        String updateSQL = "UPDATE users SET token = ?, expiry_date = CURRENT_TIMESTAMP + INTERVAL '1 hour' WHERE user_id = ?";
         try (PreparedStatement updateStmt = conn.prepareStatement(updateSQL)) {
             updateStmt.setString(1, token);
             updateStmt.setInt(2, userId);
@@ -191,7 +192,7 @@ public class PostgresUserManagerImpl implements UserManager {
         //Statement stmt = null;
         //Connection connection = null;
 
-        String updateSQL = "UPDATE users SET token = ? WHERE token = ?";
+        String updateSQL = "UPDATE users SET token = ?, expiry_date = NULL WHERE token = ?";
 
         try (Connection connection = basicDataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(updateSQL)) {
@@ -251,7 +252,7 @@ public class PostgresUserManagerImpl implements UserManager {
         //Statement stmt = null;
         //Connection connection = null;
 
-        String sql = "SELECT user_id FROM users WHERE token = ?";
+        String sql = "SELECT user_id FROM users WHERE token = ? AND expiry_date > CURRENT_TIMESTAMP";
 
         try (Connection connection = basicDataSource.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {

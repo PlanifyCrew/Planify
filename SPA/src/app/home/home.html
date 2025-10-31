@@ -16,6 +16,7 @@
 
     <app-Add-Event
       *ngIf="showAddEventPopup"
+      [eventData]="selectedEvent"
       (closed)="onClosePopup()">
     </app-Add-Event>
   </div>

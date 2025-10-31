@@ -12,6 +12,7 @@ import com.planify.model.alexa.AlexaRO;
 import com.planify.model.alexa.OutputSpeechRO;
 import com.planify.model.alexa.ResponseRO;
 import com.planify.model.event.Event;
+import com.planify.model.event.KalenderItem;
 import com.planify.model.event.TokenEvent;
 import com.planify.model.task.*;
 import com.planify.model.teilnehmer.Teilnehmerliste;
@@ -69,7 +70,7 @@ public class MappingController {
                     new TokenAnswer("OFF","0");
 
         return
-                new TokenAnswer(token,"200");
+                new TokenAnswer(token,"60");
     }
 
 
@@ -256,6 +257,10 @@ public class MappingController {
         myLogger.info("Received a GET request on event with token " + token);
 
         int userId = pgUserManager.getUserIdFromToken(token);
+
+        if (userId == -1)
+            return new ArrayList<>();
+
         List<com.planify.data.api.Event> events = pgEventManager.getAllEventsPerUserId(userId, startDate, endDate);
         List<Event> result = new ArrayList<>();
 
@@ -263,6 +268,32 @@ public class MappingController {
             result.add(new Event(e.getName(), e.getDate(), e.getDescription(), e.getStartTime(), e.getEndTime()));
 
         return result;
+    }
+
+
+    @GetMapping("/event/{event_id}")
+    public KalenderItem getEvent(@RequestParam(value = "token") String token,
+                          @RequestParam(value = "event_id") int event_id) {
+        
+        int userId = pgUserManager.getUserIdFromToken(token);
+        
+        if (userId == -1)
+            return new KalenderItem();
+
+        com.planify.data.api.Event apiEvent = pgEventManager.getEvent(event_id);
+        Event modelEvent = new Event(
+            apiEvent.getName(),
+            apiEvent.getDate(),
+            apiEvent.getDescription(),
+            apiEvent.getStartTime(),
+            apiEvent.getEndTime()
+        );
+        KalenderItem ki = new KalenderItem(
+            token,
+            modelEvent,
+            pgEventManager.getParticipants(event_id)
+        );
+        return ki;
     }
 
 

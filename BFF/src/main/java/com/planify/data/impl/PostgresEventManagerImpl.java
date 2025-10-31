@@ -1,9 +1,11 @@
 package com.planify.data.impl;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.cglib.core.Local;
 
 import com.planify.data.api.Event;
 import com.planify.data.api.EventManager;
+import com.planify.model.teilnehmer.Teilnehmerliste;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -188,6 +190,37 @@ public class PostgresEventManagerImpl implements EventManager  {
             e.printStackTrace();
         }
 
+    }
+
+
+    @Override
+    public Event getEvent(int event_id) {
+        Event event = null;
+        String sql = "SELECT * FROM events WHERE event_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                
+            pstmt.setInt(1, event_id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                event = new EventImpl(
+                    rs.getInt("event_id"),
+                    rs.getString("name"),
+                    rs.getObject("date", LocalDate.class),
+                    rs.getString("description"),
+                    rs.getObject("start_time", LocalTime.class),
+                    rs.getObject("end_time", LocalTime.class)
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return event;
+        }
+
+        return event;
     }
 
 
