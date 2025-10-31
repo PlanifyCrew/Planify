@@ -16,26 +16,26 @@ export class TaskService {
 
   getTaskData(postTokenData: any) {
     //return of({ token: 'dummy_token_123' });
-    return this.http.get('http://localhost:8090/api/task?token=' + postTokenData);
+    return this.http.get('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/task?token=' + postTokenData);
   //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/task?token=
   }
 
   postUserLogIn(postUserLoginData: Object) {
     //return of({ token: 'dummy_token_123' });
-    return this.http.post('http://localhost:8090/api/login', postUserLoginData);
+    return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/login', postUserLoginData);
  //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/login
   }
 
   postUserLogOut(postUserLogOutData: Object) {
-    return this.http.post('http://localhost:8090/api/logout', postUserLogOutData);
+    return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/logout', postUserLogOutData);
   }
 
   postUserSignUp(postUserSignUpData: Object) {
-    return this.http.post('http://localhost:8090/api/user', postUserSignUpData);
+    return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/user', postUserSignUpData);
   }
 
   postAddEvent(postAddEventData: Object) {
-    return this.http.post('http://localhost:8090/api/event', postAddEventData);
+    return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/event', postAddEventData);
   }
 
   getEventListData(eventListData: any): Observable<any> {
@@ -45,12 +45,12 @@ export class TaskService {
       endDate: eventListData.endDate.toISOString().split('T')[0]
     };
 
-    return this.http.get('http://localhost:8090/api/event', { params });
+    return this.http.get('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/event', { params });
   }
 
   postAddUser(postAddUserData: Object) {
     //return of({ token: 'dummy_token_123' });
-    return this.http.post('http://localhost:8090/api/sendEmail', postAddUserData);
+    return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/sendEmail', postAddUserData);
     //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/addevent
   }
 
