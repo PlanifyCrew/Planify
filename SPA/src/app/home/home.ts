@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, NgIf} from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -27,7 +27,8 @@ export class HomeComponent {
 
   Name = 'Planify User';
 
-   showAddEventPopup = false;
+  showAddEventPopup = false;
+  selectedEvent: any = null;
 
  calendarOptions: CalendarOptions = {
   initialView: 'dayGridMonth',
@@ -46,7 +47,9 @@ export class HomeComponent {
   // Dynamisches Nachladen der Events bei Ansichtwechsel
   datesSet: (info) => {
     this.getEventList(info.start, info.end);
-  }
+  },
+
+  eventClick: this.handleEventClick.bind(this), // Event-Handler registrieren
 };
 
 
@@ -123,7 +126,26 @@ export class HomeComponent {
       () => console.log('Get event list complete.'
     ));
   };
+
   onClosePopup() {
     this.showAddEventPopup = false;
   }
-} 
+
+  handleEventClick(arg: EventClickArg) {
+    console.log('Event wurde angeklickt:', arg.event);
+    
+    const eventData = {
+      token: localStorage.getItem('auth_token'),
+      eventId: arg.event.id
+    }
+
+    this.taskService.getEvent(eventData).subscribe(
+      data => { console.log(data)
+        this.selectedEvent = data;
+        this.showAddEventPopup = true;
+      },
+      err => console.log("Fehler"),
+      () => console.log("Complete")
+    );
+  }
+}

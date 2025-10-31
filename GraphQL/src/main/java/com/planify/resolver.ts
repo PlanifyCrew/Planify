@@ -7,7 +7,7 @@ const resolvers = {
     getEvents: async (_: any, { token, startDate, endDate }: any) => {
       // Token prüfen -> UserId abrufen
       const { rows: userRows } = await pool.query(
-        "SELECT user_id FROM users WHERE token=$1",
+        "SELECT user_id FROM users WHERE token=$1 AND expiry_date > CURRENT_TIMESTAMP",
         [token]
       );
       if (!userRows.length) throw new Error("Invalid token");
@@ -31,12 +31,12 @@ const resolvers = {
       if (!rows.length) return { token: "OFF", status: "0" };
 
       const token = uuidv4(); // zufälliger Token
-      await pool.query("UPDATE users SET token=$1 WHERE user_id=$2", [token, rows[0].id]);
+      await pool.query("UPDATE users SET token=$1, expiry_date = CURRENT_TIMESTAMP + INTERVAL '1 hour' WHERE user_id=$2", [token, rows[0].id]);
       return { token, status: "200" };
     },
 
     logout: async (_: any, { token }: any) => {
-      const { rowCount } = await pool.query("UPDATE users SET token='OFF' WHERE token=$1", [token]);
+      const { rowCount } = await pool.query("UPDATE users SET token='OFF', expiry_date = NULL WHERE token=$1", [token]);
       if (!rowCount) return { message: "User could not be logged out." };
       return { message: "User logged out." };
     },
@@ -56,7 +56,7 @@ const resolvers = {
         await client.query("BEGIN");
         // UserId prüfen
         const { rows: userRows } = await client.query(
-          "SELECT user_id FROM users WHERE token=$1",
+          "SELECT user_id FROM users WHERE token=$1 AND expiry_date > CURRENT_TIMESTAMP",
           [token]
         );
         if (!userRows.length) {
@@ -118,7 +118,7 @@ const resolvers = {
       
         // UserId prüfen
         const { rows: userRows } = await client.query(
-          "SELECT user_id FROM users WHERE token=$1",
+          "SELECT user_id FROM users WHERE token=$1 AND expiry_date > CURRENT_TIMESTAMP",
           [token]
         );
         if (!userRows.length) return { message: "Invalid token" };
@@ -181,7 +181,7 @@ const resolvers = {
 
   deleteEvent: async (_: any, { eventId, token }: any) => {
     const { rows: userRows } = await pool.query(
-      "SELECT user_id FROM users WHERE token=$1",
+      "SELECT user_id FROM users WHERE token=$1 AND expiry_date > CURRENT_TIMESTAMP",
       [token]
     );
     if (!userRows.length) throw new Error("Invalid token");

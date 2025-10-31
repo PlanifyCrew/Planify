@@ -44,6 +44,26 @@ document.getElementById("speichern").addEventListener("click", async () => {
         console.error("Netzwerkfehler:", error);
         alert("Server nicht erreichbar!");
     }
+
+    try {
+        // Teilnehmer E-Mail-Einladung separat ausführen -> bessere Wartbarkeit
+        const respEmail = await fetch("http://localhost:8090/api/sendEmail", {
+            method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert("Erfolgreich versendet: " + JSON.stringify(result));
+            } else {
+                alert("Fehler beim E-Mail-Versand");
+            }
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 
