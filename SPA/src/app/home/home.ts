@@ -136,7 +136,7 @@ export class HomeComponent {
     
     const eventData = {
       token: localStorage.getItem('auth_token'),
-      eventId: arg.event.id
+      event_id: arg.event.id
     }
 
     this.taskService.getEvent(eventData).subscribe(
