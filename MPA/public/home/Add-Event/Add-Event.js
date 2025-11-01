@@ -74,6 +74,11 @@ document.getElementById("speichern").addEventListener("click", async () => {
 });
 
 
+document.getElementById("verwerfen").addEventListener("click", () => {
+    
+});
+
+
 document.getElementById("addUser-btn").addEventListener("click", () => {
     const teilnehmer = document.getElementById("input-addUser").value;
     if (teilnehmer && !tnListe.includes(teilnehmer)) {

@@ -62,6 +62,15 @@ export class TaskService {
 
     return this.http.get(`https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/event/${eventData.event_id}`, { params });
   }
+  
+  deleteEvent(eventData: any): Observable<any> {
+    const params = {
+      token: eventData.token,
+      event_id: eventData.event_id
+    };
+
+    return this.http.get(`https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/event/${eventData.event_id}`, { params });
+  }
 
   postAddUser(postAddUserData: Object) {
     //return of({ token: 'dummy_token_123' });

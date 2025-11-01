@@ -92,4 +92,21 @@ export class AddEvent implements OnInit {
  closePopup(): void { 
     this.closed.emit();
  }
+
+
+ deleteEvent(): void {
+  if (!this.eventData?.event_id)
+    this.closePopup();
+
+  let eventData = {
+    token: localStorage.getItem('auth_token'),
+    event_id: this.eventData.event_id
+  }
+
+  this.taskService.deleteEvent(eventData).subscribe(
+    data => { console.log(data) },
+    err => console.log("Fehler"),
+    () => console.log("Löschen erfolgreich")
+  )
+ }
 }

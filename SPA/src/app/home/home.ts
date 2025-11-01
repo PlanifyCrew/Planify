@@ -108,6 +108,7 @@ export class HomeComponent {
             end += 'T' + event.endTime;
 
           return {
+            id: event.event_id,
             title : event.name,
             start : start,
             end : end,
