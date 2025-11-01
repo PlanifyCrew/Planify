@@ -27,7 +27,9 @@ export class AddEvent implements OnInit {
   tn: string = '';
 
   constructor(private taskService: TaskService) { }
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngOnChanges() {
     if (this.eventData?.event_id) {
       this.titel = this.eventData?.name;
       this.datum = this.eventData?.date;
@@ -37,6 +39,7 @@ export class AddEvent implements OnInit {
       this.tnListe = this.eventData?.tnListe.map((tn: { email: string }) => tn.email) || [];
     }
   }
+
 
   addEvent(): void {
     alert('Adding event ' + this.titel + ' on ' + this.datum + ' from ' + this.startZeit + ' to ' + this.endeZeit + ' description: ' + this.beschreibung);
