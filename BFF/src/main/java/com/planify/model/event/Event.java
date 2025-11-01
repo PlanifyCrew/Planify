@@ -19,6 +19,8 @@ import java.time.LocalTime;
 })
 
 public class Event {
+    @JsonProperty("event_id")
+    private int event_id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("date")
@@ -35,13 +37,24 @@ public class Event {
     public Event() {
     }
 
-    public Event(String name, LocalDate date, String description, LocalTime startTime, LocalTime endTime) {
+    public Event(int event_id, String name, LocalDate date, String description, LocalTime startTime, LocalTime endTime) {
         super();
+        this.event_id = event_id;
         this.name = name;
         this.date = date;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    @JsonProperty("event_id")
+    public int getEventId() {
+        return event_id;
+    }
+
+    @JsonProperty("event_id")
+    public void setEventId(int event_id) {
+        this.event_id = event_id;
     }
 
     @JsonProperty("name")
@@ -108,6 +121,10 @@ public class Event {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(Event.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("event_id");
+        sb.append('=');
+        sb.append(((this.event_id == 0)?"<null>":this.event_id));
+        sb.append(',');
         sb.append("name");
         sb.append('=');
         sb.append(((this.name == null)?"<null>":this.name));
