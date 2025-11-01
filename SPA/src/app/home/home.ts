@@ -23,8 +23,8 @@ export class HomeComponent {
 
   
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
-
-  Name = 'Planify User';
+ 
+   Name = 'Planify User';
 
   showAddEventPopup = false;
   selectedEvent: any | null = null;

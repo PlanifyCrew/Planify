@@ -265,7 +265,7 @@ public class MappingController {
         List<Event> result = new ArrayList<>();
 
         for (com.planify.data.api.Event e : events)
-            result.add(new Event(e.getName(), e.getDate(), e.getDescription(), e.getStartTime(), e.getEndTime()));
+            result.add(new Event(e.getEventId(), e.getName(), e.getDate(), e.getDescription(), e.getStartTime(), e.getEndTime()));
 
         return result;
     }
@@ -282,6 +282,7 @@ public class MappingController {
 
         com.planify.data.api.Event apiEvent = pgEventManager.getEvent(event_id);
         Event modelEvent = new Event(
+            event_id,
             apiEvent.getName(),
             apiEvent.getDate(),
             apiEvent.getDescription(),
