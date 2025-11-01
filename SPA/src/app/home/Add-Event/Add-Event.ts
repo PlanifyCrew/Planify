@@ -31,8 +31,8 @@ export class AddEvent implements OnInit {
   ngOnInit() {}
 
   ngOnChanges() {
+    console.log(this.eventData);
     if (this.eventData?.event_id) {
-      console.log(this.eventData);
       this.titel = this.eventData?.name;
       this.datum = this.eventData?.date;
       this.beschreibung = this.eventData?.description;

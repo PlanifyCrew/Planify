@@ -16,7 +16,7 @@ const client = new Brevo.TransactionalEmailsApi();
 client.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, apiKey);
 
 // POST-Endpunkt zum E-Mail-Versand
-app.post('/sendEmail', (req, res) => {
+app.post('/sendEmail', async (req, res) => {
   const { email, name, subject, htmlContent } = req.body;
 
   if (!email || !subject || !htmlContent) {
@@ -32,13 +32,14 @@ app.post('/sendEmail', (req, res) => {
   };
 
   // E-Mail senden
-  client.sendTransacEmail(emailData)
-    .then(data => {
-      console.log('E-Mail erfolgreich gesendet:', data);
-    })
-    .catch(error => {
-      console.error('Fehler beim Senden:', error);
-    });
+  try {
+    const response = await client.sendTransacEmail(emailData);
+    console.log('E-Mail erfolgreich gesendet:', response);
+    res.status(200).json({ success: true, message: 'E-Mail gesendet', data: response });
+  } catch (error) {
+    console.error('Fehler beim Senden:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
   // Server starten
