@@ -1,7 +1,8 @@
 package com.planify.data.impl;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.cglib.core.Local;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import com.planify.data.api.Event;
 import com.planify.data.api.EventManager;
@@ -9,11 +10,18 @@ import com.planify.model.teilnehmer.Teilnehmerliste;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpEntity;
+
 
 public class PostgresEventManagerImpl implements EventManager  {
 
@@ -363,6 +371,35 @@ public class PostgresEventManagerImpl implements EventManager  {
             return false;
         }
 
+        return true;
+    }
+
+
+    @Override
+    public boolean sendEmail(int event_id, List<String> tnListe) {
+        RestTemplate restTemplate = new RestTemplate();
+        String brevoUrl = "https://email-server-planify-slay-884dac5f7888.herokuapp.com/sendEmail";
+
+        for (String email : tnListe) {
+            Map<String, Object> body = new HashMap<>();
+            body.put("email", email);
+            body.put("name", "Teilnehmer");
+            body.put("subject", "Willkommen zum Event!");
+            body.put("htmlContent", "<p>Hallo " + email + ", schön dass du dabei bist!</p>");
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+            try {
+                ResponseEntity<String> response = restTemplate.postForEntity(brevoUrl, entity, String.class);
+                System.out.println("Mail an " + email + ": " + response.getStatusCode());
+            } catch (Exception e) {
+                System.err.println("Fehler bei Mail an " + email + ": " + e.getMessage());
+            }
+        }
+        
         return true;
     }
 

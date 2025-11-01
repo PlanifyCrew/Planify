@@ -67,21 +67,24 @@ export class AddEvent implements OnInit {
       () => console.log('Add event complete.')
     );
 
-    let addUser = {
-      token: localStorage.getItem('auth_token'),
-      tnListe: this.tnListe
-    }
+    if (this.tnListe.length) {
+      let addUser = {
+        token: localStorage.getItem('auth_token'),
+        event_id: this.eventData?.event_id,
+        tnListe: this.tnListe
+      }
 
-    // Teilnehmer E-Mail-Benachrichtigung separat einfügen -> bessere Wartbarkeit
-    this.taskService.postAddUser(addUser).subscribe(
-      data => {
-        console.log(data)
-      },
-      err => {
-        console.log('Could not reach heroku.')
-      },
-      () => console.log('Login complete.')
-    );
+      // Teilnehmer E-Mail-Benachrichtigung separat einfügen -> bessere Wartbarkeit
+      this.taskService.postAddUser(addUser).subscribe(
+        data => {
+          console.log(data)
+        },
+        err => {
+          console.log('Could not reach heroku.')
+        },
+        () => console.log('Login complete.')
+      );
+    }
 
      this.closed.emit();
   }

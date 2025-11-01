@@ -17,5 +17,6 @@ public interface EventManager {
     List<Teilnehmerliste> getParticipants(int event_id);
     boolean addParticipants(int event_id, List<Integer> user_ids);
     boolean removeParticipants(int event_id, List<Integer> user_ids);
+    boolean sendEmail(int event_id, List<String> tnListe);
 
 }

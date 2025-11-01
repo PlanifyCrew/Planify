@@ -16,6 +16,7 @@ import com.planify.model.event.KalenderItem;
 import com.planify.model.event.TokenEvent;
 import com.planify.model.task.*;
 import com.planify.model.teilnehmer.Teilnehmerliste;
+import com.planify.model.user.MessageAnswer;
 import com.planify.model.user.Token;
 import com.planify.model.user.TokenAnswer;
 import com.planify.model.user.User;
@@ -29,6 +30,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -321,6 +323,36 @@ public class MappingController {
         }
 
         return new com.planify.model.user.MessageAnswer("Event deleted.");
+    }
+
+
+    @PostMapping(
+        path = "/sendEmail",
+        consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public com.planify.model.user.MessageAnswer sendEmail(@RequestBody TokenEvent tokenEvent) {
+
+        Logger myLogger = Logger.getLogger("UserCreate");
+        myLogger.info("Received a POST request on user with token " + tokenEvent.getToken());
+
+        int userId = pgUserManager.getUserIdFromToken(tokenEvent.getToken());
+
+        if (userId == -1)
+            return new MessageAnswer("Kein User mit dem Token");
+
+        List<Teilnehmerliste> tnListe = pgEventManager.getParticipants(tokenEvent.getEvent().getEventId());
+        List<String> emailListe = tnListe.stream()
+            .map(Teilnehmerliste::getEmail)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+        boolean emailsSent = pgEventManager.sendEmail(tokenEvent.getEvent().getEventId(), emailListe);
+
+        if (!emailsSent)
+        return new com.planify.model.user.MessageAnswer("E-Mail sending error.");
+
+        return new com.planify.model.user.MessageAnswer("E-Mail(s) sent.");
     }
 
 
