@@ -56,7 +56,8 @@ Thumbs.db
 node_modules/
 .vscode/
 BFF/.gradle/
-BFF/src/main/email/.env
+Email-Server/.env
+.env
 
 # Java
 /bin/

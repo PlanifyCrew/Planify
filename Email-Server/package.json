@@ -1,0 +1,14 @@
+{
+  "name": "brevo-email-service",
+  "version": "1.0.0",
+  "description": "Kleiner Express-Server zum Versenden von E-Mails über Brevo",
+  "main": "sendEmail.js",
+  "scripts": {
+    "start": "node sendEmail.js"
+  },
+  "dependencies": {
+    "@getbrevo/brevo": "^3.0.1",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2"
+  }
+}

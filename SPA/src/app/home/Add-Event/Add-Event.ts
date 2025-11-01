@@ -2,12 +2,13 @@
 import { TaskService } from '../../../data/task-service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgIf } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-Add-Event',
   standalone: true,
-  imports: [FormsModule, HttpClientModule],
+  imports: [FormsModule, HttpClientModule, NgIf],
   templateUrl: './Add-Event.html',
   styleUrls: ['./Add-Event.css'],
   providers: [TaskService]
@@ -31,6 +32,7 @@ export class AddEvent implements OnInit {
 
   ngOnChanges() {
     if (this.eventData?.event_id) {
+      console.log(this.eventData);
       this.titel = this.eventData?.name;
       this.datum = this.eventData?.date;
       this.beschreibung = this.eventData?.description;
@@ -92,21 +94,23 @@ export class AddEvent implements OnInit {
       this.tnListe.push(this.tn.trim());
       this.tn = ''; // Input zurücksetzen
     }
-
-    function showAddUserSuccess(): void {
-      const addUserSuccess = document.getElementById("addUser-success") as HTMLDivElement;
-      addUserSuccess.style.display="inline-block";
-    }
-
-    function showAddUserFailed(): void {
-      const addUserFailed = document.getElementById("addUser-failed") as HTMLDivElement;
-      addUserFailed.style.display="inline-block";
-    }
 }
 
  closePopup(): void { 
     this.closed.emit();
  }
+
+
+  showSuccess = false;
+  showError = false;
+
+ showAddUserSuccess(): void {
+    this.showSuccess = true;
+  }
+
+  showAddUserFailed(): void {
+    this.showError = true;
+  }
 
 
  deleteEvent(): void {
