@@ -58,8 +58,15 @@ document.getElementById("speichern").addEventListener("click", async () => {
             if (response.ok) {
                 const result = await response.json();
                 alert("Erfolgreich versendet: " + JSON.stringify(result));
+
+                showAddUserSuccess();
+
             } else {
                 alert("Fehler beim E-Mail-Versand");
+
+                showAddUserFailed();
+
+
             }
     } catch (error) {
         console.error(error);
@@ -67,10 +74,20 @@ document.getElementById("speichern").addEventListener("click", async () => {
 });
 
 
-document.getElementById("addUser").addEventListener("click", () => {
+document.getElementById("addUser-btn").addEventListener("click", () => {
     const teilnehmer = document.getElementById("input-addUser").value;
     if (teilnehmer && !tnListe.includes(teilnehmer)) {
         tnListe.push(teilnehmer);
         document.getElementById("input-addUser").value = "";
     }
 });
+
+function showAddUserSuccess() {
+    let AddUserSuccess = document.getElementById("addUser-success").style.display="inline-block";
+    AddUserSuccess.classList.add("show");
+};
+
+function showAddUserFailed() {
+    let AddUserFailed = document.getElementById("addUser-failed").style.display="inline-block";
+    AddUserFailed.classList.add("show");
+}

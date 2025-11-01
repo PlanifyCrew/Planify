@@ -193,6 +193,7 @@ label {
     font-size: 16px;
     font-weight: 700;
     background-color: rgba(255, 255, 255, 0.6);
+    display: none;
 }
 
 #addUser-failed{
@@ -205,6 +206,7 @@ label {
     font-size: 16px;
     font-weight: 700;
     background-color: rgba(255, 255, 255, 0.6);
+    display: none;
 }
 
 #verwerfen {
@@ -295,6 +297,7 @@ td {
     font-weight: 700;
     background-color: rgba(255, 255, 255, 0.6);
     margin-top: 170px;
+    opacity: 1;
 }
 
 #removedUser-failed {
@@ -308,6 +311,7 @@ td {
     font-weight: 700;
     background-color: rgba(255, 255, 255, 0.6);
     margin-top: 170px;
+    opacity: 1;
 }
 
 
