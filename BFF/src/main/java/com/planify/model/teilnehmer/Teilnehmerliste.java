@@ -25,6 +25,8 @@ public class Teilnehmerliste {
     private String role;
     @JsonProperty("status")
     private String status;
+    @JsonProperty("email")
+    private String email;
 
     
     @JsonIgnore
@@ -33,11 +35,12 @@ public class Teilnehmerliste {
     public Teilnehmerliste() {
     }
 
-    public Teilnehmerliste(int event_id, int user_id, String role, String status) {
+    public Teilnehmerliste(int event_id, int user_id, String role, String status, String email) {
         this.event_id = event_id;
         this.user_id = user_id;
         this.role = role;
         this.status = status;
+        this.email = email;
     }
 
     @JsonProperty("event_id")
@@ -79,6 +82,16 @@ public class Teilnehmerliste {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    @JsonProperty("email")
+    public String getEmail() {
+        return email;
+    }
+
+    @JsonProperty("email")
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
@@ -109,6 +122,10 @@ public class Teilnehmerliste {
         sb.append("status");
         sb.append('=');
         sb.append(((this.status == null)?"<null>":this.status));
+        sb.append(',');
+        sb.append("email");
+        sb.append('=');
+        sb.append(((this.email == null)?"<null>":this.email));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');

@@ -10,7 +10,6 @@ import { TaskService } from '../../data/task-service';
 import { AddEvent } from './Add-Event/Add-Event';
 
 
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -28,7 +27,7 @@ export class HomeComponent {
   Name = 'Planify User';
 
   showAddEventPopup = false;
-  selectedEvent: any = null;
+  selectedEvent: any | null = null;
 
  calendarOptions: CalendarOptions = {
   initialView: 'dayGridMonth',

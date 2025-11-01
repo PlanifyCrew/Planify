@@ -270,7 +270,7 @@ public class PostgresEventManagerImpl implements EventManager  {
 
         List<com.planify.model.teilnehmer.Teilnehmerliste> participants = new ArrayList<>();
 
-        String sql = "SELECT * FROM participants WHERE event_id = ?";
+        String sql = "SELECT p.*, u.email FROM participants p JOIN users u ON p.user_id = u.user_id WHERE event_id = ?";
 
         try (Connection connection = basicDataSource.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -283,7 +283,8 @@ public class PostgresEventManagerImpl implements EventManager  {
                         rs.getInt("event_id"),
                         rs.getInt("user_id"),
                         rs.getString("role"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getString("email")
                 );
                 participants.add(pList);
             }

@@ -26,6 +26,8 @@ public class KalenderItem {
     private Event event;
     @JsonProperty("tnListe")
     private List<Teilnehmerliste> tnListe;
+    //@JsonProperty("tnEmails")
+    //private List<String> tnEmails;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
