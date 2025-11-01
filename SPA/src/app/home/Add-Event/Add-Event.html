@@ -1,14 +1,15 @@
     <div class="container">
         <div class="btn-close"><button type="button" id="close" (click)="closePopup()">&#10006;</button></div>
         <h1>Termin erstellen</h1>
-        <form class="titel-text-datum">
-            <div class="input-text">
-                <input type="text" id="titel" name="titel" [(ngModel)]="titel" placeholder="Titel" required>
-                <input type="date" id="datum" name="datum" [(ngModel)]="datum" required>
-            </div>
-            <textarea id="beschreibung" name="beschreibung" [(ngModel)]="beschreibung" placeholder="Beschreibung"></textarea>
-        </form>
-        <div class="details">
+        
+        <div class="top-part">
+            <form class="titel-text-datum">
+                <div class="input-text">
+                    <input type="text" id="titel" name="titel" [(ngModel)]="titel" placeholder="Titel" required>
+                    <input type="date" id="datum" name="datum" [(ngModel)]="datum" required>
+                </div>
+                <textarea id="beschreibung" name="beschreibung" [(ngModel)]="beschreibung" placeholder="Beschreibung"></textarea>
+            </form>
             <form class="zeit">
                 <div class="beginn-time">
                     <label for="startZeit">Beginn:</label>
@@ -19,11 +20,47 @@
                     <input type="time" id="endeZeit" name="endeZeit" [(ngModel)]="endeZeit">
                 </div>
             </form>
-            <form class="users">
-                <input type="email" id="input-addUser" name="addUser" [(ngModel)]="tn" placeholder="Teilnehmer E-Mail">
-                <button type="button" id="showUsers" >Teilnehmer anzeigen</button><br>
-                <button type="button" id="addUser" (click)="addParticipant()">Hinzufügen</button>
-            </form>
         </div>
+
+        <div id="addUser-success">E-Mail erfolgreich an Teilnehmer gesendet.</div>
+        <div id="addUser-failed">E-Mail konnte nicht gesendet werden. Versuche es später erneut.</div>
+            
+        <form class="users">
+            <input type="email" id="input-addUser" name="addUser" [(ngModel)]="tn" placeholder="Teilnehmer E-Mail">
+            <button type="button" id="addUser" (click)="addParticipant()">Hinzufügen</button>
+        </form>
+
+        <div class="tabelle-user">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">Eingeladene Teilnehmer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="output-addUser">test@test.dejkhdfghghhhhhdfbnjrbedjb- das hier sieht man nicht mehr</td>
+                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                    </tr>
+                    <tr>
+                        <td id="output-addUser">test@test.de</td>
+                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                    </tr>
+                    <tr>
+                        <td id="output-addUser">test@test.de</td>
+                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                    </tr>
+                    <tr>
+                        <td id="output-addUser">test@test.de</td>
+                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="removedUser-success">Teilnehmer erfolgreich entfernt.</div>
+        <div id="removedUser-failed">Teilnehmer konnte nicht entfernt werden. Versuche es später erneut.</div>
+
+        <button type="submit" id="verwerfen">Termin verwerfen</button>
         <button type="submit" id="speichern" (click)="addEvent()">Speichern</button>
     </div>

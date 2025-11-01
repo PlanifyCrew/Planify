@@ -86,9 +86,21 @@ export class AddEvent implements OnInit {
 
 
   addParticipant(): void {
+    alert('Adding user ' + this.tn + ' to event ' + this.titel + ' on ' + this.datum + ' from ' + this.startZeit + ' to ' + this.endeZeit + ' description: ' + this.beschreibung);
+    
     if (this.tn.trim()) {
       this.tnListe.push(this.tn.trim());
       this.tn = ''; // Input zurücksetzen
+    }
+
+    function showAddUserSuccess(): void {
+      const addUserSuccess = document.getElementById("addUser-success") as HTMLDivElement;
+      addUserSuccess.style.display="inline-block";
+    }
+
+    function showAddUserFailed(): void {
+      const addUserFailed = document.getElementById("addUser-failed") as HTMLDivElement;
+      addUserFailed.style.display="inline-block";
     }
 }
 
