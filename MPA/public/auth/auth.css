@@ -1,8 +1,13 @@
 body {
     display: flex;
+    align-items: center;
     justify-content: center;
     background-color: #152B51;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+}
+
+header {
+    text-align: center;
 }
 
 img {
@@ -11,25 +16,52 @@ img {
 }
 
 .container {
-    position: absolute;
-    top: 250px;
+    position: relative;
     background-color: #213e6e;
-    width: 840px;
-    height: 480px;
-    position: absolute;
+    width: 90vw;
+    max-width: 840px;
+    height: 50vh;
+    max-height: 480px;
     overflow: hidden;
-    border-radius: 50px;
+    border-radius: 3rem;
 }
 
 .section-input {
     position: absolute;
-    width: 420px;
-    height: 480px;
+    width: 50%;
+    height: 100%;
+}
+
+.section-input h1 {
+    font-size: 3rem;
+    display: inline-block;
+    color: #F9F5E3;
+    margin-top: 12%;
+    text-align: center;
+    margin-left: 50%;
+    transform: translateX(-50%);
 }
 
 .section-change {
     position: absolute;
-    width: 420px;
+    width: 50%;
+    height: 100%;
+    background-color: #FFADBC;
+}
+
+.section-change h1 {
+    font-size: 45px;
+    margin-top: 50px;
+    margin-left: 40%;
+    transform: translateX(-50%);
+}
+
+.section-change p {
+    font-size: 23px;
+    margin-top: 100px;
+    margin-left: 40%;
+    transform: translateX(-50%);
+    white-space: nowrap;
 }
 
 .input {
@@ -87,45 +119,13 @@ button {
     transition: 0.5s;
 }
 
-.section-input h1 {
-    font-size: 45px;
-    display: inline-block;
-    color: #F9F5E3;
-    margin-top: 50px;
-    text-align: center;
-    margin-left: 50%;
-    transform: translateX(-50%);
-}
-
-.section-change {
-    color: #1D1E2C;
-    width: 420px;
-    height: 480px;
-    background-color: #FFADBC;
-}
-
-.section-change h1 {
-    font-size: 45px;
-    margin-top: 50px;
-    margin-left: 40%;
-    transform: translateX(-50%);
-}
-
-.section-change p {
-    font-size: x-large;
-    margin-top: 100px;
-    margin-left: 40%;
-    transform: translateX(-50%);
-    white-space: nowrap;
+#over-signup {
+    left: -800px;
+    transition: 0.5s;
 }
 
 #over-login {
     left: 420px;
-    transition: 0.5s;
-}
-
-#over-signup {
-    left: -800px;
     transition: 0.5s;
 }
 
@@ -141,4 +141,47 @@ button {
 #error-message.show {
     display: block;
     opacity: 1;
+}
+
+@media (max-width: 1000px) or (max-height: 800px) {
+    img {
+        width: 250px;
+        height: auto;
+    }
+
+    .container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 400px;
+    min-height: 1000px;
+  }
+
+  #login {
+    position: relative;
+    width: 100%;
+    height: 500px;
+  }
+
+  #over-login {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    transform: translateX(-205%);
+}
+
+    #signup {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    transform: translateX(-105%);
+  }
+
+    #over-signup {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    transform: translateX(-100%);
+  }
+
 }
