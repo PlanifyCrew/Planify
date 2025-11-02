@@ -26,6 +26,7 @@ export class AddEvent implements OnInit, OnChanges {
   endeZeit: string = '';
   tnListe: string[] = [];
   tn: string = '';
+  addUserEventId: number | undefined; // für Email-Benachrichtigung
 
   constructor(private taskService: TaskService) { }
   ngOnInit() {}
@@ -59,7 +60,6 @@ export class AddEvent implements OnInit, OnChanges {
       tnListe: this.tnListe
     };
     console.log(data);
-    let addUserEventId: number | undefined; // für Email-Benachrichtigung
 
     if (isEdit) {
     // PUT: Event aktualisieren
@@ -68,7 +68,8 @@ export class AddEvent implements OnInit, OnChanges {
     this.taskService.putAddEvent(data).subscribe(
       response => {
         console.log('Event aktualisiert:', response);
-        addUserEventId = this.eventData.event_id;
+        this.addUserEventId = this.eventData.event_id;
+        this.sendEmails();
       },
       err => console.log('Fehler beim Aktualisieren.')
     );
@@ -79,31 +80,11 @@ export class AddEvent implements OnInit, OnChanges {
       this.taskService.postAddEvent(data).subscribe(
         data => {
           console.log(data);
-          addUserEventId = data.event_id;
+          this.addUserEventId = data.event_id;
+          this.sendEmails();
         },
         err => console.log('Could not reach server.'),
         () => console.log('Add event complete.')
-      );
-    }
-
-    if (this.tnListe.length) {
-      let addUser = {
-        token: localStorage.getItem('auth_token'),
-        event: {
-          event_id: addUserEventId
-        },
-        tnListe: this.tnListe
-      }
-
-      // Teilnehmer E-Mail-Benachrichtigung separat einfügen -> bessere Wartbarkeit
-      this.taskService.postAddUser(addUser).subscribe(
-        data => {
-          console.log(data)
-        },
-        err => {
-          console.log('Could not reach heroku.')
-        },
-        () => console.log('Login complete.')
       );
     }
 
@@ -148,10 +129,40 @@ export class AddEvent implements OnInit, OnChanges {
     event_id: this.eventData.event_id
   }
 
+  console.log("Löschen mit Daten");
+  console.log(eventData);
+
   this.taskService.deleteEvent(eventData).subscribe(
     data => { console.log(data) },
     err => console.log("Fehler"),
     () => console.log("Löschen erfolgreich")
   )
+ }
+
+
+ sendEmails() {
+    if (this.tnListe.length) {
+      let addUser = {
+        token: localStorage.getItem('auth_token'),
+        event: {
+          event_id: this.addUserEventId
+        },
+        tnListe: this.tnListe
+      }
+
+      console.log("Emails senden für:");
+      console.log(addUser);
+
+      // Teilnehmer E-Mail-Benachrichtigung separat einfügen -> bessere Wartbarkeit
+      this.taskService.postAddUser(addUser).subscribe(
+        data => {
+          console.log(data)
+        },
+        err => {
+          console.log('Could not reach heroku.')
+        },
+        () => console.log('Login complete.')
+      );
+    }
  }
 }

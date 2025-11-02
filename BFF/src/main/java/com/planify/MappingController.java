@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.planify.data.api.TaskManager;
 import com.planify.data.api.UserManager;
 import com.planify.data.impl.*;
-import com.planify.model.alexa.AlexaRO;
-import com.planify.model.alexa.OutputSpeechRO;
-import com.planify.model.alexa.ResponseRO;
+import com.planify.model.email.EventMailPayload;
 import com.planify.model.event.Event;
 import com.planify.model.event.KalenderItem;
 import com.planify.model.event.TokenEvent;
@@ -21,13 +19,13 @@ import com.planify.model.user.Token;
 import com.planify.model.user.TokenAnswer;
 import com.planify.model.user.User;
 import com.planify.model.user.UserWithName;
+import com.planify.model.email.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.Objects;
@@ -48,6 +46,8 @@ public class MappingController {
         // Variante Postgres
         PostgresUserManagerImpl pgUserManager = PostgresUserManagerImpl.getPostgresUserManagerImpl();
         PostgresEventManagerImpl pgEventManager = PostgresEventManagerImpl.getPostgresEventManagerImpl();
+
+    MailPublisher mailPublisher;
 
     @PostMapping(
             path = "/login",
@@ -347,12 +347,19 @@ public class MappingController {
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
 
-        boolean emailsSent = pgEventManager.sendEmail(tokenEvent.getEvent().getEventId(), emailListe);
+        //boolean emailsSent = pgEventManager.sendEmail(tokenEvent.getEvent().getEventId(), emailListe);
 
-        if (!emailsSent)
+        for (String email : emailListe) {
+            EventMailPayload payload = new EventMailPayload(tokenEvent.getEvent().getEventId(), email);
+            mailPublisher.sendMailToQueue(payload);
+        }
+        return new MessageAnswer("E-Mail(s) in Queue gelegt.");
+
+
+        /*if (!emailsSent)
         return new com.planify.model.user.MessageAnswer("E-Mail sending error.");
 
-        return new com.planify.model.user.MessageAnswer("E-Mail(s) sent.");
+        return new com.planify.model.user.MessageAnswer("E-Mail(s) sent.");*/
     }
 
 
@@ -466,70 +473,4 @@ public class MappingController {
         //PostgresUserManagerImpl.getPostgresUserManagerImpl().createUserTable();
         return "Database Tables created";
     }
-
-
-
-
-
-
-    @PostMapping(
-            path = "/alexa",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
-    )
-    @ResponseStatus(HttpStatus.OK)
-    public AlexaRO createTask(@RequestBody AlexaRO alexaRO) {
-
-        Logger.getLogger("MappingController").log(Level.INFO,"MappingController POST /alexa ");
-        String outText = "";
-
-        if (alexaRO.getRequest().getType().equalsIgnoreCase("LaunchRequest"))
-            outText += "Welcome to the Mosbach Task Organizer. ";
-
-        if (alexaRO.getRequest().getType().equalsIgnoreCase("IntentRequest")
-                &&
-                (alexaRO.getRequest().getIntent().getName().equalsIgnoreCase("TaskReadIntent"))
-        ) {
-            List<com.planify.data.api.Task> tasks = taskManager.getAllTasksPerEmail("mh@test.com");
-            if (!tasks.isEmpty()) {
-                outText += "You have to do the following tasks. ";
-                int i = 1;
-                for (com.planify.data.api.Task t : tasks) {
-                    outText += "Task Number " + i + " with Name " + t.getName()
-                        + " and priority " + t.getPriority() + " . ";
-                    i++;
-                }
-            }
-            else outText += "This is your lucky day. You have no tasks to do. ";
-        }
-        return
-                prepareResponse(alexaRO, outText, true);
-    }
-
-
-    @PostMapping(
-            path = "/alexa",
-            consumes = {MediaType.APPLICATION_JSON_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    public AlexaRO getTasks(@RequestBody AlexaRO alexaRO) {
-
-        //String outText = "";
-
-
-        return alexaRO;
-    }
-
-    private AlexaRO prepareResponse(AlexaRO alexaRO, String outText, boolean shouldEndSession) {
-
-        alexaRO.setRequest(null);
-        alexaRO.setSession(null);
-        alexaRO.setContext(null);
-        OutputSpeechRO outputSpeechRO = new OutputSpeechRO();
-        outputSpeechRO.setType("PlainText");
-        outputSpeechRO.setText(outText);
-        ResponseRO response = new ResponseRO(outputSpeechRO, shouldEndSession);
-        alexaRO.setResponse(response);
-        return alexaRO;
-    }
-
 }

@@ -2,6 +2,8 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.spring") version "1.9.10"
 }
 
 group = "com.heroku"
@@ -20,5 +22,8 @@ dependencies {
     implementation("org.postgresql:postgresql")
     implementation("org.apache.commons:commons-dbcp2")
     implementation("software.amazon.awssdk:sqs:2.34.8")
+    implementation("org.springframework.boot:spring-boot-starter-amqp") // RabbitMQ
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa") // Datenbank
+    implementation("org.postgresql:postgresql") // PostgreSQL Treiber
     // implementation("software.amazon.awssdk:aws-sdk-java") // A bit heavy, loads the whole skd
 }
