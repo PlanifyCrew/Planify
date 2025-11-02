@@ -24,6 +24,9 @@ dependencies {
     implementation("software.amazon.awssdk:sqs:2.34.8")
     implementation("org.springframework.boot:spring-boot-starter-amqp") // RabbitMQ
     implementation("org.springframework.boot:spring-boot-starter-data-jpa") // Datenbank
+    implementation("org.springframework.amqp:spring-rabbit:3.2.6")
+    implementation("org.springframework.amqp:spring-amqp:3.0.0")
+    implementation("org.springframework:spring-context:6.0.0")
     implementation("org.postgresql:postgresql") // PostgreSQL Treiber
     // implementation("software.amazon.awssdk:aws-sdk-java") // A bit heavy, loads the whole skd
 }
