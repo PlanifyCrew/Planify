@@ -1,5 +1,6 @@
 import pool from "./db/pool.js";
 import { v4 as uuidv4 } from "uuid";
+import fetch from 'node-fetch';
 
 
 const resolvers = {
@@ -20,6 +21,36 @@ const resolvers = {
       );
       return events;
     },
+
+
+    getEvent: async (_: any, { token, event_id }: any) => {
+      // Token prüfen 
+      const { rows: userRows } = await pool.query(
+        "SELECT user_id FROM users WHERE token=$1 AND expiry_date > CURRENT_TIMESTAMP",
+        [token]
+      );
+      if (!userRows.length) throw new Error("Invalid token");
+
+      const { rows: eventRows } = await pool.query(
+        "SELECT * FROM events WHERE event_id=$1",
+        [event_id]
+      );
+      const { rows: tnListeRows } = await pool.query(
+        "SELECT p.*, u.email FROM participants p JOIN users u ON p.user_id = u.user_id WHERE event_id=$1",
+        [event_id]
+      );
+
+
+      if (!eventRows.length)
+        throw new Error("Event not found");
+
+      const kalenderItem = {
+        ...eventRows[0],      // Einzelnes Event-Objekt
+        tnListe: tnListeRows  // Liste der Teilnehmer
+      };
+
+      return kalenderItem;
+    }
   },
 
   Mutation: {
@@ -204,6 +235,41 @@ const resolvers = {
 
     return { message: "Event deleted" };
   },
+
+
+  sendEmail: async (_: any, { token, event, tnListe }: any) => {
+    const { rows: userRows } = await pool.query(
+      "SELECT user_id FROM users WHERE token=$1 AND expiry_date > CURRENT_TIMESTAMP",
+      [token]
+    );
+    if (!userRows.length) throw new Error("Invalid token");
+
+    const brevoUrl = "https://email-server-planify-slay-884dac5f7888.herokuapp.com/sendEmail";
+
+      for (const email of tnListe) {
+        const body = {
+          email: email,
+          name: "Teilnehmer",
+          subject: "Willkommen zum Event!",
+          htmlContent: `<p>Hallo ${email}, schön dass du beim Event <strong>${event.name}</strong> am ${event.date} dabei bist!</p>`
+        };
+
+        try {
+          const response = await fetch(brevoUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+          });
+
+          const result = await response.json();
+          console.log(`E-Mail an ${email}:`, response.status, result);
+        } catch (error) {
+          console.error(`Fehler beim Senden an ${email}:`, error);
+        }
+      }
+
+      return { success: true, message: "E-Mails wurden versendet." };
+  }
 
 };
 export default resolvers;

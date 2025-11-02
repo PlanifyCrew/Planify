@@ -88,7 +88,9 @@ export class AddEvent implements OnInit, OnChanges {
     if (this.tnListe.length) {
       let addUser = {
         token: localStorage.getItem('auth_token'),
-        event_id: addUserEventId,
+        event: {
+          event_id: addUserEventId
+        },
         tnListe: this.tnListe
       }
 
@@ -135,8 +137,10 @@ export class AddEvent implements OnInit, OnChanges {
 
 
  deleteEvent(): void {
-  if (!this.eventData?.event_id)
+  if (!this.eventData?.event_id) {
     this.closePopup();
+    return;
+  }
 
   let eventData = {
     token: localStorage.getItem('auth_token'),

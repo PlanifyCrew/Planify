@@ -144,13 +144,13 @@ export class HomeComponent {
         console.log('Received event data:', data);
         // Create a properly structured event object
         this.selectedEvent = {
-          event_id: data.event_id,
-          name: data.title || data.name,  // try both title and name
-          date: data.date || data.start?.split('T')[0],  // try both date and start
-          description: data.description || data.extendedProps?.description,
-          startTime: data.startTime || data.start?.split('T')[1],
-          endTime: data.endTime || data.end?.split('T')[1],
-          tnListe: data.tnListe || []
+          event_id: data.event.event_id,
+          name: data.event.name,
+          date: data.event.date,
+          description: data.event.description,
+          startTime: data.event.startTime,
+          endTime: data.event.endTime,
+          tnListe: data.tnListe
         };
         console.log('Structured event data:', this.selectedEvent);
         
