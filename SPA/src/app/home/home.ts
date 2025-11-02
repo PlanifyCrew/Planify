@@ -39,6 +39,7 @@ export class HomeComponent {
   },
   dateClick: (info) => {
     alert(`Datum geklickt: ${info.dateStr}`);
+    this.selectedEvent = null;
     this.showAddEventPopup = true;
   },
   events: [{ title: 'Meeting', date: new Date().toISOString().slice(0, 10) }],

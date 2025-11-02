@@ -4,12 +4,14 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planify.data.api.Event;
 import com.planify.data.api.EventManager;
 import com.planify.model.teilnehmer.Teilnehmerliste;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -385,22 +387,52 @@ public class PostgresEventManagerImpl implements EventManager  {
             body.put("email", email);
             body.put("name", "Teilnehmer");
             body.put("subject", "Willkommen zum Event!");
-            body.put("htmlContent", "<p>Hallo " + email + ", schön dass du dabei bist!</p>");
+            String baseUrl = "https://spa-planify-slay-a9c3a6483062.herokuapp.com/login/" + event_id; // deine SPA-URL
+            String link = baseUrl + "?event_id=" + event_id + "&email=" + email;
+            String html = "<p>Hallo " + email + ", schön dass du dabei bist!</p>" +
+                          "<p>Klicke <a href='" + link + "'>hier</a>, um dich einzuloggen und deine Teilnahme zu bestätigen.</p>";
+            body.put("htmlContent", html);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
             try {
+            // Loggen
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(body);
+            System.out.println("Sende JSON: " + json);
                 ResponseEntity<String> response = restTemplate.postForEntity(brevoUrl, entity, String.class);
                 System.out.println("Mail an " + email + ": " + response.getStatusCode());
             } catch (Exception e) {
                 System.err.println("Fehler bei Mail an " + email + ": " + e.getMessage());
+                e.printStackTrace(); // ← zeigt dir den Stacktrace
+                return false;
             }
         }
         
         return true;
+    }
+
+    @Override
+    public boolean changeStatus(int event_id, int user_id) {
+        String sql = "UPDATE participants SET status = 'angenommen' WHERE event_id = ? AND user_id = ?";
+
+        try (Connection connection = basicDataSource.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, event_id);
+            pstmt.setInt(2, user_id);
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

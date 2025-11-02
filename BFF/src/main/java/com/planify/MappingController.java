@@ -357,6 +357,30 @@ public class MappingController {
 
 
     @PostMapping(
+        path = "/checkParticipant",
+        consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public com.planify.model.user.MessageAnswer checkParticipant(@RequestBody TokenEvent tokenEvent) {
+
+        Logger myLogger = Logger.getLogger("AddTask");
+        myLogger.info("Received a POST request on checkParticipant with token " + tokenEvent.getToken());
+
+        int userId = pgUserManager.getUserIdFromToken(tokenEvent.getToken());
+
+        if (userId == -1)
+            return new MessageAnswer("Token nicht bestätigt");
+
+        boolean statusChanged = pgEventManager.changeStatus(tokenEvent.getEvent().getEventId(), userId);
+
+        if (!statusChanged)
+            return new MessageAnswer("Status konnte nicht geändert werden");
+
+        return new MessageAnswer("Participant angenommen");
+    }
+
+
+    @PostMapping(
             path = "/task",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )

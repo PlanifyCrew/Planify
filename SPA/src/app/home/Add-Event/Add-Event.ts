@@ -72,6 +72,7 @@ export class AddEvent implements OnInit, OnChanges {
       },
       err => console.log('Fehler beim Aktualisieren.')
     );
+    this.eventData = null;
     
     } else {
       // POST: Neues Event erstellen

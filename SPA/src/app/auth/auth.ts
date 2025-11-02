@@ -4,6 +4,7 @@ import { TaskService } from '../../data/task-service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -20,7 +21,7 @@ export class Auth implements OnInit {
   password: string = '';
   private token: any;
 
-  constructor(private router: Router, private taskService: TaskService) { }
+  constructor(private router: Router, private taskService: TaskService, private aroute: ActivatedRoute) { }
   ngOnInit() { }
 
   loginError: string | null = null;
@@ -40,6 +41,25 @@ export class Auth implements OnInit {
         if (this.token && (this.token.token != 'OFF')) {
           localStorage.setItem('auth_token', this.token.token);
           this.loginError = null; // Erfolgreich → keine Fehlermeldung
+
+          const event_id = this.aroute.snapshot.queryParamMap.get('event_id');
+          const email = this.aroute.snapshot.queryParamMap.get('email');
+          // Wenn per Einladung Login geöffnet und erfolgreich eingeloggt, dann prüfen, ob als Teilnehmer vorgesehen und "annehmen" setzen
+          if (event_id && email) {
+            const checkData = {
+              token: localStorage.getItem('auth_token'),
+              event: {
+                event_id: event_id
+              },
+              email: [email]
+            }
+            this.taskService.postCheckParticipant(checkData).subscribe(
+              data => console.log("Erfolreich angenommen " + data),
+              err => console.log("Einladung konnte nicht angenommen werden"),
+              () => console.log("Einladung angenommen")
+            )
+          };
+
           this.router.navigate(['/home']); // Navigation zur Home-Seite
         } else {
           this.loginError = 'Fehler! Falsche Email oder Passwort!'; // Fehlermeldung setzen

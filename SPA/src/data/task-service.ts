@@ -78,4 +78,9 @@ export class TaskService {
     return this.http.post(emailServiceUrl, postAddUserData, httpOptions);
   }
 
+  
+  postCheckParticipant(postCheckData: Object) {
+    return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/checkParticipant', postCheckData);
+  }
+
 }

@@ -61,6 +61,6 @@
         <div id="removedUser-success" *ngIf="showSuccess">Teilnehmer erfolgreich entfernt.</div>
         <div id="removedUser-failed" *ngIf="showError">Teilnehmer konnte nicht entfernt werden. Versuche es später erneut.</div>
 
-        <button type="submit" id="verwerfen">Termin verwerfen</button>
+        <button type="submit" id="verwerfen" (click)="deleteEvent()">Termin verwerfen</button>
         <button type="submit" id="speichern" (click)="addEvent()">Speichern</button>
     </div>
