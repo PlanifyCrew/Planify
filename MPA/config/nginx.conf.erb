@@ -18,7 +18,7 @@ http {
     root <%= ENV["HOME"] %>/public;
 
     location / {
-      index home.html;
+      index home/home.html;
       try_files $uri $uri.html $uri/ =404;
     }
 
