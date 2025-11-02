@@ -150,7 +150,7 @@ public class MappingController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @ResponseStatus(HttpStatus.OK)
-    public com.planify.model.user.MessageAnswer addTokenEvent(@RequestBody TokenEvent tokenEvent) {
+    public int addTokenEvent(@RequestBody TokenEvent tokenEvent) {
 
         Logger myLogger = Logger.getLogger("AddEvent");
         myLogger.info("Received a POST request on event with token " + tokenEvent.getToken());
@@ -158,7 +158,7 @@ public class MappingController {
         int userId = pgUserManager.getUserIdFromToken(tokenEvent.getToken());
         myLogger.info("Found the following userId for this token " + userId);
         if (userId == -1)
-            return new com.planify.model.user.MessageAnswer("No user found or not logged on.");
+            return 0;
 
         EventImpl eventImpl = new EventImpl(
                                 0,
@@ -181,7 +181,7 @@ public class MappingController {
             );
         }
 
-        return new com.planify.model.user.MessageAnswer("Event created.");
+        return eventImpl.getEventId();
     }
 
 

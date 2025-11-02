@@ -140,8 +140,13 @@ export class HomeComponent {
     }
 
     this.taskService.getEvent(eventData).subscribe(
-      data => { console.log(data)
-        this.selectedEvent = data;
+      data => {
+        console.log(data)
+        
+        // Hier wird die Referenz geändert
+        this.selectedEvent = { ...data };
+
+        // Popup anzeigen
         this.showAddEventPopup = true;
       },
       err => console.log("Fehler"),

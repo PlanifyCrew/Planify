@@ -3,7 +3,7 @@ import { TaskService } from '../../../data/task-service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgIf } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-Add-Event',
@@ -14,7 +14,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   providers: [TaskService]
 })
 
-export class AddEvent implements OnInit {
+export class AddEvent implements OnInit, OnChanges {
   @Input() visible: boolean = false;
   @Input() eventData: any | null = null;
   @Output() closed = new EventEmitter<void>();
@@ -30,9 +30,10 @@ export class AddEvent implements OnInit {
   constructor(private taskService: TaskService) { }
   ngOnInit() {}
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges): void {
     console.log(this.eventData);
-    if (this.eventData?.event_id) {
+    if (changes['eventData'] && changes['eventData'].currentValue) {
+      const event = changes['eventData'].currentValue;
       this.titel = this.eventData?.name;
       this.datum = this.eventData?.date;
       this.beschreibung = this.eventData?.description;
@@ -44,9 +45,10 @@ export class AddEvent implements OnInit {
 
 
   addEvent(): void {
+    const isEdit = !!this.eventData?.event_id;
     alert('Adding event ' + this.titel + ' on ' + this.datum + ' from ' + this.startZeit + ' to ' + this.endeZeit + ' description: ' + this.beschreibung);
 
-    let data = {
+    let data: any = {
       token: localStorage.getItem('auth_token'),
       event: {
         name: this.titel,
@@ -58,19 +60,36 @@ export class AddEvent implements OnInit {
       tnListe: this.tnListe
     };
     console.log(data);
+    let addUserEventId: number | undefined; // für Email-Benachrichtigung
 
-    this.taskService.postAddEvent(data).subscribe(
-      data => {
-        console.log(data);
+    if (isEdit) {
+    // PUT: Event aktualisieren
+    data.event_id = this.eventData.event_id;
+
+    this.taskService.putAddEvent(data).subscribe(
+      response => {
+        console.log('Event aktualisiert:', response);
+        addUserEventId = this.eventData.event_id;
       },
-      err => console.log('Could not reach server.'),
-      () => console.log('Add event complete.')
+      err => console.log('Fehler beim Aktualisieren.')
     );
+    
+    } else {
+      // POST: Neues Event erstellen
+      this.taskService.postAddEvent(data).subscribe(
+        data => {
+          console.log(data);
+          addUserEventId = data.event_id;
+        },
+        err => console.log('Could not reach server.'),
+        () => console.log('Add event complete.')
+      );
+    }
 
     if (this.tnListe.length) {
       let addUser = {
         token: localStorage.getItem('auth_token'),
-        event_id: this.eventData?.event_id,
+        event_id: addUserEventId,
         tnListe: this.tnListe
       }
 

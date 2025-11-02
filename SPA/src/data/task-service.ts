@@ -34,7 +34,7 @@ export class TaskService {
     return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/user', postUserSignUpData);
   }
 
-  postAddEvent(postAddEventData: Object) {
+  postAddEvent(postAddEventData: any): Observable<any> {
     return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/event', postAddEventData);
   }
 
