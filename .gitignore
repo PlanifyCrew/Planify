@@ -64,3 +64,6 @@ Email-Server/.env
 /target/
 /out/
 /*.class
+
+# Angular Build Cache
+.angular/
