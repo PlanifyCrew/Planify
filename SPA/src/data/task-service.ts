@@ -72,10 +72,10 @@ export class TaskService {
     return this.http.get(`https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/event/${eventData.event_id}`, { params });
   }
 
-  postAddUser(postAddUserData: Object) {
-    //return of({ token: 'dummy_token_123' });
-    return this.http.post('https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/sendEmail', postAddUserData);
-    //https://stormy-shore-22254-b36f0b7e9adf.herokuapp.com/api/addevent
+  postAddUser(postAddUserData: Object): Observable<any> {
+    const emailServiceUrl = 'https://bff-planify-slay-78df7e83cb88.herokuapp.com/api/sendEmail';
+    console.log('Sending email with data:', postAddUserData);
+    return this.http.post(emailServiceUrl, postAddUserData, httpOptions);
   }
 
 }

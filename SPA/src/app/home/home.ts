@@ -141,11 +141,19 @@ export class HomeComponent {
 
     this.taskService.getEvent(eventData).subscribe(
       data => {
-        console.log(data)
+        console.log('Received event data:', data);
+        // Create a properly structured event object
+        this.selectedEvent = {
+          event_id: data.event_id,
+          name: data.title || data.name,  // try both title and name
+          date: data.date || data.start?.split('T')[0],  // try both date and start
+          description: data.description || data.extendedProps?.description,
+          startTime: data.startTime || data.start?.split('T')[1],
+          endTime: data.endTime || data.end?.split('T')[1],
+          tnListe: data.tnListe || []
+        };
+        console.log('Structured event data:', this.selectedEvent);
         
-        // Hier wird die Referenz geändert
-        this.selectedEvent = { ...data };
-
         // Popup anzeigen
         this.showAddEventPopup = true;
       },

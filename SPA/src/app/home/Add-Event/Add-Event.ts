@@ -31,15 +31,14 @@ export class AddEvent implements OnInit, OnChanges {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.eventData);
+    console.log('Event data changed:', this.eventData);
     if (changes['eventData'] && changes['eventData'].currentValue) {
-      const event = changes['eventData'].currentValue;
-      this.titel = this.eventData?.name;
-      this.datum = this.eventData?.date;
-      this.beschreibung = this.eventData?.description;
-      this.startZeit = this.eventData?.startTime;
-      this.endeZeit = this.eventData?.endTime;
-      this.tnListe = this.eventData?.tnListe.map((tn: { email: string }) => tn.email) || [];
+      this.titel = this.eventData.name;
+      this.datum = this.eventData.date;
+      this.beschreibung = this.eventData.description;
+      this.startZeit = this.eventData.startTime;
+      this.endeZeit = this.eventData.endTime;
+      this.tnListe = this.eventData.tnListe?.map((tn: { email: string }) => tn.email) || [];
     }
   }
 
