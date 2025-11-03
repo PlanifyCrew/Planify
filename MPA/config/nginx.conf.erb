@@ -1,0 +1,30 @@
+worker_processes 1;
+
+events {
+  worker_connections 1024;
+}
+
+http {
+  include       mime.types;
+  default_type  application/octet-stream;
+
+  sendfile        on;
+  keepalive_timeout  65;
+
+  server {
+    listen <%= ENV["PORT"] %>;
+    server_name localhost;
+
+    root <%= ENV["HOME"] %>/public;
+
+    location / {
+      index home/home.html;
+      try_files $uri $uri.html $uri/ =404;
+    }
+
+    location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|ttf|svg|eot)$ {
+      expires max;
+      add_header Cache-Control "public";
+    }
+  }
+}
