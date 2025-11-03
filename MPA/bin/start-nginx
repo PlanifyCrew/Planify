@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Render config/nginx.conf.erb → config/nginx.conf
+erb config/nginx.conf.erb > config/nginx.conf
+
+# Starte Nginx mit gerenderter Datei
+nginx -c "$PWD/config/nginx.conf"

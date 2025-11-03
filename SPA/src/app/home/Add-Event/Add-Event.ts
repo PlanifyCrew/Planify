@@ -70,10 +70,10 @@ export class AddEvent implements OnInit, OnChanges {
         console.log('Event aktualisiert:', response);
         this.addUserEventId = this.eventData.event_id;
         this.sendEmails();
+        this.eventData = null;
       },
       err => console.log('Fehler beim Aktualisieren.')
     );
-    this.eventData = null;
     
     } else {
       // POST: Neues Event erstellen
