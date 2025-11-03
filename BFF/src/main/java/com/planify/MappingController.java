@@ -340,12 +340,15 @@ public class MappingController {
         if (userId == -1)
             return new MessageAnswer("Kein User mit dem Token");
 
-        List<Teilnehmerliste> tnListe = pgEventManager.getParticipants(tokenEvent.getEvent().getEventId());
+        /*List<Teilnehmerliste> tnListe = pgEventManager.getParticipants(tokenEvent.getEvent().getEventId());
         List<String> emailListe = tnListe.stream()
             .filter(tn -> "Teilnehmer".equals(tn.getRole()))
             .map(Teilnehmerliste::getEmail)
             .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+            .collect(Collectors.toList());*/
+
+        List<String> emailListe = new ArrayList<>();
+        emailListe.addAll(tokenEvent.getTnListe());
 
         //boolean emailsSent = pgEventManager.sendEmail(tokenEvent.getEvent().getEventId(), emailListe);
 

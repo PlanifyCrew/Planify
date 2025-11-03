@@ -80,7 +80,7 @@ export class AddEvent implements OnInit, OnChanges {
       this.taskService.postAddEvent(data).subscribe(
         data => {
           console.log(data);
-          this.addUserEventId = data.event_id;
+          this.addUserEventId = data;
           this.sendEmails();
         },
         err => console.log('Could not reach server.'),
