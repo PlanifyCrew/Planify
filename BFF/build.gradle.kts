@@ -8,7 +8,16 @@ plugins {
 
 group = "com.heroku"
 version = "1.0.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+
+// Use Java toolchain to target Java 21
+java {
+    toolchain {
+        languageVersion.set(org.gradle.jvm.toolchain.JavaLanguageVersion.of(21))
+    }
+}
+
+// Keep sourceCompatibility aligned with toolchain
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()

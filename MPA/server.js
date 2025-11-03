@@ -4,37 +4,49 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// Serve static files with proper MIME types
+// Log all requests before processing
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  next();
+});
+
+// Serve static files from public directory with proper MIME types
 app.use(express.static(path.join(__dirname, 'public'), {
-  setHeaders: (res, path, stat) => {
-    if (path.endsWith('.js')) {
+  setHeaders: (res, filePath, stat) => {
+    if (filePath.endsWith('.js')) {
       res.set('Content-Type', 'application/javascript');
-    } else if (path.endsWith('.css')) {
+    } else if (filePath.endsWith('.css')) {
       res.set('Content-Type', 'text/css');
-    } else if (path.endsWith('.png')) {
+    } else if (filePath.endsWith('.png')) {
       res.set('Content-Type', 'image/png');
     }
-  }
+  },
+  fallthrough: true // Try next middleware if file not found
 }));
 
-// Redirect root to home page
+// Handle root route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'home', 'home.html'));
 });
 
+// Handle 404s
+app.use((req, res, next) => {
+  console.error(`404: ${req.method} ${req.url} not found`);
+  res.status(404).send(`File not found: ${req.url}`);
+});
+
 // Error handling
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+  console.error(`Error: ${err.stack}`);
+  res.status(500).send('Internal Server Error');
 });
 
-// Log all requests
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-});
-
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`${new Date().toISOString()} Server started on port ${PORT}`);
   console.log(`Static files served from: ${path.join(__dirname, 'public')}`);
+  console.log('Routes:');
+  console.log('  / -> public/home/home.html');
+  console.log('  /home/* -> public/home/*');
+  console.log('  /* -> public/*');
 });
