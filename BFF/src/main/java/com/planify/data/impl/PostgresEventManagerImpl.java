@@ -38,7 +38,7 @@ public class PostgresEventManagerImpl implements EventManager  {
 
     @Bean
     public PostgresEventManagerImpl postgresEventManagerImpl() {
-        return PostgresEventManagerImpl.getPostgresEventManagerImpl();
+        return new PostgresEventManagerImpl();
     }
 
     // Singleton
