@@ -36,11 +36,27 @@ function openAddEventPopup(date) {
       return res.text();
     })
     .then(html => {
-      addEventContainer.innerHTML = html;
+      // Parse the fragment and remove any <link> or <script> tags so the browser
+      // doesn't try to load relative assets like "Add-Event.css" (which would
+      // resolve to "/Add-Event.css" and cause 404s). We'll load the CSS/JS
+      // explicitly with absolute paths below.
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        // remove link and script tags from fragment
+        doc.querySelectorAll('link, script').forEach(n => n.remove());
+        addEventContainer.innerHTML = doc.body.innerHTML;
+      } catch (e) {
+        // fallback: inject raw HTML
+        console.warn('DOMParser failed, injecting raw HTML', e);
+        addEventContainer.innerHTML = html;
+      }
+
       popup.classList.remove('hidden');
 
       // Ensure CSS for the popup is loaded (absolute path)
       const cssHref = '/home/Add-Event/Add-Event.css';
+      console.log('Loading add-event CSS:', cssHref);
       if (!document.querySelector(`link[href="${cssHref}"]`)) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -50,6 +66,7 @@ function openAddEventPopup(date) {
 
       // Load the script and call its initializer once loaded
       const scriptSrc = '/home/Add-Event/Add-Event.js';
+      console.log('Loading add-event script:', scriptSrc);
       // Remove any previous dynamic script
       const prev = document.querySelector(`script[data-dyn-script="${scriptSrc}"]`);
       if (prev) prev.remove();
