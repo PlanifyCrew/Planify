@@ -14,6 +14,7 @@ public class MailPublisher {
     }
 
     public void sendMailToQueue(EventMailPayload payload) {
-        rabbitTemplate.convertAndSend("eventMailQueue", payload);
+        // Sende an Exchange mit Routing Key
+        rabbitTemplate.convertAndSend("eventExchange", "email.send", payload);
     }
 }

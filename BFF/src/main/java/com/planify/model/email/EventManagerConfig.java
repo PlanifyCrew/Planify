@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class EventManagerConfig {
 
     @Bean
-    public EventManager eventManagerBean() {
+    public PostgresEventManagerImpl eventManagerBean() {
         return PostgresEventManagerImpl.getPostgresEventManagerImpl();
     }
 }

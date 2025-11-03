@@ -2,8 +2,10 @@ package com.planify;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 
-@SpringBootApplication(scanBasePackages = "com.planify")
+@SpringBootApplication
+@EnableRabbit
 public class DemoApplication {
 
 	public static void main(String[] args) {

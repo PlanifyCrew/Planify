@@ -23,8 +23,10 @@ import java.time.LocalTime;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpEntity;
+import org.springframework.stereotype.Component;
 
 
+@Component
 public class PostgresEventManagerImpl implements EventManager  {
 
     String databaseURL = "jdbc:postgresql://cfcojm7sp9tfip.cluster-czz5s0kz4scl.eu-west-1.rds.amazonaws.com:5432/d44sbjo012nqhj?user=udfs2mqik8ah2c&password=p8e291e59de3810e593f30e436d70c25ed9ee5d3498fa69d864195d7cefec8920&sslmode=require";
