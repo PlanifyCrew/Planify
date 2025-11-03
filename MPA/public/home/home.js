@@ -28,21 +28,30 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Popup öffnen
-  function openAddEventPopup(date) {
-    fetch('add-event/add-event.html')
-      .then(res => res.text())
-      .then(html => {
-        addEventContainer.innerHTML = html;
-        popup.classList.remove('hidden');
-        initAddEventScript(date); // Initialisierung ausführen
-      });
-  }
+function openAddEventPopup(date) {
+  fetch('add-event/add-event.html')
+    .then(res => res.text())
+    .then(html => {
+      addEventContainer.innerHTML = html;
+      popup.classList.remove('hidden');
 
-  // Popup schließen
-  function closePopup() {
-    popup.classList.add('hidden');
-    addEventContainer.innerHTML = '';
-  }
+      // X-Button Listener setzen
+      const closeBtn = addEventContainer.querySelector('#close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          closePopup();
+        });
+      }
+
+      initAddEventScript(date); // Initialisierung ausführen
+    });
+}
+
+// Popup schließen
+function closePopup() {
+  popup.classList.add('hidden');
+  addEventContainer.innerHTML = '';
+}
 
   // Zugriff von innerem Skript erlauben
   window.closeAddEventPopup = closePopup;
