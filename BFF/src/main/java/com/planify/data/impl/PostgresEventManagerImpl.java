@@ -384,10 +384,10 @@ public class PostgresEventManagerImpl implements EventManager  {
         String brevoUrl = "https://email-server-planify-slay-884dac5f7888.herokuapp.com/sendEmail";
         String baseUrl = "https://spa-planify-slay-a9c3a6483062.herokuapp.com/login/" + event_id;
         String link = baseUrl + "?event_id=" + event_id + "&email=" + tn;
-        //String html = "<p>Hallo " + tn + ", schön dass du dabei bist!</p>" +
-        //                  "<p>Klicke <a href='" + link + "'>hier</a>, um dich einzuloggen und deine Teilnahme zu bestätigen.</p>";
+        String html = "<p>Hallo " + tn + ", schön dass du dabei bist!</p>" +
+              "<p>Klicke <a href='" + link + "'>hier</a>, um dich einzuloggen und deine Teilnahme zu bestätigen.</p>";
         
-        String html = "<p>Dies ist eine Testmail über Heroku.</p>";
+        //String html = "<p>Dies ist eine Testmail über Heroku.</p>";
 
         Map<String, Object> body = Map.of(
             "email", tn,

@@ -8,12 +8,29 @@ type MessageAnswer {
 }
 
 type Event {
-  id: ID!
+  event_id: ID!
   name: String
   date: String
   description: String
   startTime: String
   endTime: String
+}
+
+type Teilnehmer {
+  event_id: ID!
+  user_id: ID!
+  role: String!
+  status: String!
+}
+
+type KalenderItem {
+  event_id: ID!
+  name: String!
+  date: String!
+  description: String
+  start_time: String
+  end_time: String
+  tnListe: [Teilnehmer]
 }
 
 input EventInput {
@@ -26,6 +43,7 @@ input EventInput {
 
 type Query {
   getEvents(token: String!, startDate: String!, endDate: String!): [Event]
+  getEvent(token: String!, eventId: ID!): [KalenderItem]
 }
 
 type Mutation {
@@ -35,4 +53,5 @@ type Mutation {
   addEvent(token: String!, event: EventInput!, tnListe: [String]!): MessageAnswer
   updateEvent(eventId: ID!, token: String!, event: EventInput!, tnListe: [String]!): MessageAnswer
   deleteEvent(eventId: ID!, token: String!): MessageAnswer
+  sendEmail(token: String!, event: EventInput!, tnListe: [String]!): MessageAnswer
 }

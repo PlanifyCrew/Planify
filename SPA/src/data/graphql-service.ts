@@ -92,6 +92,26 @@ export class GraphqlService {
         }).valueChanges;
     }
 
+    getEvent(token: string, event_id: number): Observable<any> {
+        return this.apollo.watchQuery({
+        query: gql`
+            query($token: String!, $event_id: ID!) {
+                events(token: $token, event_id: $event_id) {
+                    event_id
+                    name
+                    date
+                    description
+                    start_time
+                    end_time
+                    tnListe
+                }
+            }
+        `,
+        variables: { token, event_id },
+        fetchPolicy: 'network-only', // optional: um Cache zu umgehen
+        }).valueChanges;
+    }
+
     deleteEvent(event_id: number, token: string): Observable<any> {
         return this.apollo.mutate({
             mutation: gql`
@@ -102,6 +122,19 @@ export class GraphqlService {
                 }
             `,
             variables: { event_id, token }
+        });
+    }
+
+    sendEmail(token: string, event: any, tnListe: string[]): Observable<any> {
+        return this.apollo.mutate({
+            mutation: gql`
+                mutation($token: String!, $event: EventInput!, $tnListe: [String]!) {
+                    deleteEvent(token: $token, event: $event, tnListe: $tnListe) {
+                        messageAnswer
+                    }
+                }
+            `,
+            variables: { token, event, tnListe }
         });
     }
   
