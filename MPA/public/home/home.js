@@ -29,21 +29,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Popup öffnen
 function openAddEventPopup(date) {
-  fetch('add-event/add-event.html')
-    .then(res => res.text())
+  // Use absolute path to the Add-Event fragment and ensure its CSS/JS are loaded
+  fetch('/home/Add-Event/Add-Event.html')
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to load add-event fragment: ' + res.status);
+      return res.text();
+    })
     .then(html => {
       addEventContainer.innerHTML = html;
       popup.classList.remove('hidden');
 
-      // X-Button Listener setzen
-      const closeBtn = addEventContainer.querySelector('#close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-          closePopup();
-        });
+      // Ensure CSS for the popup is loaded (absolute path)
+      const cssHref = '/home/Add-Event/Add-Event.css';
+      if (!document.querySelector(`link[href="${cssHref}"]`)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = cssHref;
+        document.head.appendChild(link);
       }
 
-      initAddEventScript(date); // Initialisierung ausführen
+      // Load the script and call its initializer once loaded
+      const scriptSrc = '/home/Add-Event/Add-Event.js';
+      // Remove any previous dynamic script
+      const prev = document.querySelector(`script[data-dyn-script="${scriptSrc}"]`);
+      if (prev) prev.remove();
+
+      const s = document.createElement('script');
+      s.src = scriptSrc;
+      s.setAttribute('data-dyn-script', scriptSrc);
+      s.onload = () => {
+        // initAddEventScript is provided by Add-Event.js
+        if (typeof initAddEventScript === 'function') {
+          initAddEventScript(date);
+        } else {
+          console.warn('initAddEventScript is not defined after loading', scriptSrc);
+        }
+      };
+      s.onerror = (e) => console.error('Failed to load add-event script', e);
+      document.body.appendChild(s);
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Fehler beim Laden des Event-Formulars.');
     });
 }
 
