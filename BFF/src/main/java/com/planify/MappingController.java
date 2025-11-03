@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import com.planify.data.api.TaskManager;
 import com.planify.data.api.UserManager;
 import com.planify.data.impl.*;
-import com.planify.model.email.EventMailPayload;
 import com.planify.model.event.Event;
 import com.planify.model.event.KalenderItem;
 import com.planify.model.event.TokenEvent;
@@ -181,7 +180,7 @@ public class MappingController {
             );
         }
 
-        return eventImpl.getEventId();
+        return eventId;
     }
 
 
@@ -343,6 +342,7 @@ public class MappingController {
 
         List<Teilnehmerliste> tnListe = pgEventManager.getParticipants(tokenEvent.getEvent().getEventId());
         List<String> emailListe = tnListe.stream()
+            .filter(tn -> "Teilnehmer".equals(tn.getRole()))
             .map(Teilnehmerliste::getEmail)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());

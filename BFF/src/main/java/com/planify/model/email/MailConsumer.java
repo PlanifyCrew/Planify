@@ -19,7 +19,6 @@ public class MailConsumer {
 
     @RabbitListener(queues = "eventMailQueue")
     public void receiveMail(EventMailPayload payload) {
-        List<String> emailList = List.of(payload.getEmail());
-        pgEventManager.sendEmail(payload.getEventId(), emailList);
+        pgEventManager.sendEmail(payload.getEventId(), payload.getEmail());
     }
 }
