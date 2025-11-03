@@ -7,73 +7,70 @@
     <link rel="stylesheet" href="Add-Event.css">
 </head>
 <body>
-    <div class="container">
-        <div class="btn-close"><button type="button" id="close">&#10006;</button></div>
-        <h1>Termin erstellen</h1>
-        <div class="top-part">
-            <form class="titel-text-datum">
-                <div class="input-text">
-                    <input type="text" id="titel" name="titel" placeholder="Titel" required>
-                    <input type="date" id="datum" name="datum" required>
-                </div>
-                <textarea id="beschreibung" name="beschreibung" placeholder="Beschreibung"></textarea>
+    <main>
+        <div class="container">
+            <div class="btn-close"><button type="button" id="close">&#10006;</button></div>
+            <h1>Termin erstellen</h1>
+            <div class="top-part">
+                <form class="titel-text-datum">
+                    <div class="input-text">
+                        <input type="text" id="titel" name="titel" placeholder="Titel" required>
+                        <input type="date" id="datum" name="datum" required>
+                    </div>
+                    <textarea id="beschreibung" name="beschreibung" placeholder="Beschreibung"></textarea>
+                </form>
+                <form class="zeit">
+                    <div class="beginn-time">
+                        <label for="startZeit">Beginn:</label>
+                        <input type="time" id="startZeit" name="startZeit">              
+                    </div>
+                    <div class="end-time">
+                        <label for="endeZeit">Ende:</label>
+                        <input type="time" id="endeZeit" name="endeZeit">
+                    </div>
+                </form>
+            </div>
+            <div id="addUser-success">E-Mail erfolgreich an Teilnehmer gesendet.</div>
+            <div id="addUser-failed">E-Mail konnte nicht gesendet werden. Versuche es später erneut.</div>
+            <form class="users"> 
+                <input type="email" id="input-addUser" name="addUser" placeholder="Teilnehmer E-Mail">
+                <button type="button" id="addUser-btn">Hinzufügen</button>
             </form>
-            <form class="zeit">
-                <div class="beginn-time">
-                    <label for="startZeit">Beginn:</label>
-                    <input type="time" id="startZeit" name="startZeit">              
-                </div>
-                <div class="end-time">
-                    <label for="endeZeit">Ende:</label>
-                    <input type="time" id="endeZeit" name="endeZeit">
-                </div>
-            </form>
+            <div class="tabelle-user">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Eingeladene Teilnehmer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="output-addUser">test@test.dejkhdfghghhhhhdfbnjrbedjb- das hier sieht man nicht mehr</td>
+                            <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                        </tr>
+                        <tr>
+                            <td id="output-addUser">test@test.de</td>
+                            <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                        </tr>
+                        <tr>
+                            <td id="output-addUser">test@test.de</td>
+                            <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                        </tr>
+                        <tr>
+                            <td id="output-addUser">test@test.de</td>
+                            <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="removedUser-success">Teilnehmer erfolgreich entfernt.</div>
+            <div id="removedUser-failed">Teilnehmer konnte nicht entfernt werden. Versuche es später erneut.</div>
+            <div class="btn-ende">
+                <button type="submit" id="verwerfen">Termin verwerfen</button>
+                <button type="submit" id="speichern">Speichern</button>
+            </div>
         </div>
-        
-        <div id="addUser-success">E-Mail erfolgreich an Teilnehmer gesendet.</div>
-        <div id="addUser-failed">E-Mail konnte nicht gesendet werden. Versuche es später erneut.</div>
-            
-        <form class="users"> 
-            <input type="email" id="input-addUser" name="addUser" placeholder="Teilnehmer E-Mail">
-            <button type="button" id="addUser-btn">Hinzufügen</button>
-        </form>
-
-        <div class="tabelle-user">
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">Eingeladene Teilnehmer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td id="output-addUser">test@test.dejkhdfghghhhhhdfbnjrbedjb- das hier sieht man nicht mehr</td>
-                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
-                    </tr>
-                    <tr>
-                        <td id="output-addUser">test@test.de</td>
-                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
-                    </tr>
-                    <tr>
-                        <td id="output-addUser">test@test.de</td>
-                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
-                    </tr>
-                    <tr>
-                        <td id="output-addUser">test@test.de</td>
-                        <td><button type="submit" id="removeUser-btn">Entfernen</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    
-        <div id="removedUser-success">Teilnehmer erfolgreich entfernt.</div>
-        <div id="removedUser-failed">Teilnehmer konnte nicht entfernt werden. Versuche es später erneut.</div>
-
-        <button type="submit" id="verwerfen">Termin verwerfen</button>
-        <button type="submit" id="speichern">Speichern</button>
-        
-    </div>
-
+    </main>
     <script src="Add-Event.js"></script>
 </body>
 </html>
