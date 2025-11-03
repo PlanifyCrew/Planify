@@ -387,7 +387,7 @@ public class PostgresEventManagerImpl implements EventManager  {
             body.put("email", email);
             body.put("name", "Teilnehmer");
             body.put("subject", "Willkommen zum Event!");
-            String baseUrl = "https://spa-planify-slay-a9c3a6483062.herokuapp.com/login/" + event_id; // deine SPA-URL
+            String baseUrl = "https://spa-planify-slay-a9c3a6483062.herokuapp.com/login/" + event_id;
             String link = baseUrl + "?event_id=" + event_id + "&email=" + email;
             String html = "<p>Hallo " + email + ", schön dass du dabei bist!</p>" +
                           "<p>Klicke <a href='" + link + "'>hier</a>, um dich einzuloggen und deine Teilnahme zu bestätigen.</p>";
