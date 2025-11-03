@@ -11,9 +11,8 @@ public class MailConsumer {
 
     private final PostgresEventManagerImpl pgEventManager;
 
-    @Autowired
-    public MailConsumer(PostgresEventManagerImpl pgEventManager) {
-        this.pgEventManager = pgEventManager;
+    public MailConsumer() {
+        this.pgEventManager = PostgresEventManagerImpl.getPostgresEventManagerImpl();;
     }
 
     @RabbitListener(queues = "eventMailQueue")
