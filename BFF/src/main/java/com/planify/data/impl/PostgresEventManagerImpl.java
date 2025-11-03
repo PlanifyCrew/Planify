@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 
 
-@Configuration
 public class PostgresEventManagerImpl implements EventManager  {
 
     String databaseURL = "jdbc:postgresql://cfcojm7sp9tfip.cluster-czz5s0kz4scl.eu-west-1.rds.amazonaws.com:5432/d44sbjo012nqhj?user=udfs2mqik8ah2c&password=p8e291e59de3810e593f30e436d70c25ed9ee5d3498fa69d864195d7cefec8920&sslmode=require";
@@ -36,10 +35,6 @@ public class PostgresEventManagerImpl implements EventManager  {
     String password = "p8e291e59de3810e593f30e436d70c25ed9ee5d3498fa69d864195d7cefec8920"; //"Slay123";
     BasicDataSource basicDataSource;
 
-    @Bean
-    public PostgresEventManagerImpl postgresEventManagerImpl() {
-        return new PostgresEventManagerImpl();
-    }
 
     // Singleton
     static PostgresEventManagerImpl postgresEventManager = null;
