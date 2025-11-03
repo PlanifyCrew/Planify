@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import com.planify.data.impl.PostgresEventManagerImpl;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 
 @Component
 public class MailConsumer {
 
     private final PostgresEventManagerImpl pgEventManager;
 
-    public MailConsumer(PostgresEventManagerImpl pgEventManager) {
+    public MailConsumer(@Qualifier("eventManagerBean") PostgresEventManagerImpl pgEventManager) {
         this.pgEventManager = pgEventManager;
     }
 
