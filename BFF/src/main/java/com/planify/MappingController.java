@@ -1,11 +1,11 @@
 package com.planify;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 //import software.amazon.awssdk.*;
 
-import com.planify.data.api.TaskManager;
 import com.planify.data.api.UserManager;
 import com.planify.data.impl.*;
 import com.planify.model.event.Event;
@@ -34,19 +34,15 @@ import java.util.Objects;
 @RequestMapping("/api")
 public class MappingController {
 
-    TaskManager taskManager =
-            PropertyFileTaskManagerImpl.getPropertyFileTaskManagerImpl("src/main/resources/tasks.properties");
-            // PostgresTaskManagerImpl.getPostgresTaskManagerImpl();
-
-    UserManager userManager =
-            PropertyFileUserManagerImpl.getPropertyFileUserManagerImpl("src/main/resources/users.properties");
-            // PostgresUserManagerImpl.getPostgresUserManagerImpl();
-
         // Variante Postgres
         PostgresUserManagerImpl pgUserManager = PostgresUserManagerImpl.getPostgresUserManagerImpl();
         PostgresEventManagerImpl pgEventManager = PostgresEventManagerImpl.getPostgresEventManagerImpl();
 
     MailPublisher mailPublisher;
+    @Autowired
+    public MappingController(MailPublisher mailPublisher) {
+        this.mailPublisher = mailPublisher;
+}
 
     @PostMapping(
             path = "/login",
@@ -390,90 +386,4 @@ public class MappingController {
     }
 
 
-    @PostMapping(
-            path = "/task",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
-    )
-    @ResponseStatus(HttpStatus.OK)
-    public com.planify.model.user.MessageAnswer loginUser(@RequestBody TokenTask tokenTask) {
-
-        Logger myLogger = Logger.getLogger("AddTask");
-        myLogger.info("Received a POST request on task with token " + tokenTask.getToken());
-
-        String userId = "dummy";
-        myLogger.info("Found the following userId for this token " + userId);
-        if (userId.equals("NOT-FOUND"))
-            return
-                    new com.planify.model.user.MessageAnswer("No user found or not logged on.");
-        boolean couldCreateTask = taskManager
-                .addTask(
-                        new TaskImpl(
-                                tokenTask.getTask().getName(),
-                                tokenTask.getTask().getPriority(),
-                                userId
-                        )
-                );
-
-        myLogger.info("Task created " + couldCreateTask);
-
-        // Turn on if you have a queue and want to push a message into it
-        // Then move the SQSClientBuilder up so that it is called only once,
-        // keep only the sendMessage command here
-
-        /*
-        AwsBasicCredentials accessCredentials = AwsBasicCredentials.builder()
-                .accessKeyId("geheim")
-                .secretAccessKey("noch mehr geheim")
-                .build();
-
-        try (SqsClient sqsClient = SqsClient.builder()
-                .region(Region.US_WEST_2)
-                .credentialsProvider(new AwsCredentialsProvider() {
-                    public AwsCredentials resolveCredentials() {
-                        return accessCredentials;
-                    }
-                })
-                .build()) {
-            sqsClient.sendMessage(SendMessageRequest.builder()
-                    .queueUrl("http://my-queue-url")
-                    .messageBody("Task created. ")
-                    .build()
-            );
-        }
-        */
-
-        // TODO
-        // Fehlerfall behandeln
-
-        return
-                new com.planify.model.user.MessageAnswer("Task created.");
-    }
-/* 
-    @GetMapping("/task")
-    public TaskList getTasks(@RequestParam(value = "token", defaultValue = "123") String token) {
-
-        Logger myLogger = Logger.getLogger("TaskLogger");
-        myLogger.info("Received a GET request on task with token " + token);
-
-        String userId = userManager.getUserIdFromToken(token);
-        List<com.demo.data.api.Task> tasks = taskManager.getAllTasksPerUserId(userId);
-        List<Task> result = new ArrayList<>();
-        for (com.demo.data.api.Task t : tasks)
-            result.add(new Task(t.getName(), t.getPriority()));
-
-        // TODO
-        // Fehlerfall behandeln
-
-        return
-                new TaskList(result);
-    }
-                */
-
-    @GetMapping("/task/createtables")
-    @ResponseStatus(HttpStatus.OK)
-    public String createTask() {
-        //PostgresTaskManagerImpl.getPostgresTaskManagerImpl().createTaskTable();
-        //PostgresUserManagerImpl.getPostgresUserManagerImpl().createUserTable();
-        return "Database Tables created";
-    }
 }
