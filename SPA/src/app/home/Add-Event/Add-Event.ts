@@ -98,6 +98,8 @@ export class AddEvent implements OnInit, OnChanges {
     if (this.tn.trim()) {
       this.tnListe.push(this.tn.trim());
       this.tn = ''; // Input zurücksetzen
+
+      this.addEmailToPopup(this.tn);
     }
 }
 
@@ -165,4 +167,22 @@ export class AddEvent implements OnInit, OnChanges {
       );
     }
  }
+
+
+ addEmailToPopup(email: string) {
+    const tableBody = document.getElementById("userTableBody");
+
+    if (!tableBody) return;
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td id="output-addUser">${email}</td>
+        <td><button type="button" class="removeUser-btn">Entfernen</button></td>
+    `;
+
+    tableBody.appendChild(row);
+}
+
+
 }

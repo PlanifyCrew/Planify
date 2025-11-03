@@ -277,7 +277,7 @@ td {
     white-space: nowrap;
 }
 
-#removeUser-btn{
+.removeUser-btn{
     background-color: transparent;
     color: #993333;
     border: 1px solid;
@@ -286,7 +286,7 @@ td {
     padding-left: 5px;
 }
 
-#removedUser-success {
+.removedUser-success {
     margin-left: 50px;
     position: absolute;
     color: #993333;
@@ -300,7 +300,7 @@ td {
     opacity: 1;
 }
 
-#removedUser-failed {
+.removedUser-failed {
     margin-left: 50px;
     position: absolute;
     color: #993333;
