@@ -13,6 +13,7 @@ public class MailConsumer {
 
     private final PostgresEventManagerImpl pgEventManager;
 
+    @Autowired
     public MailConsumer(@Qualifier("eventManagerBean") PostgresEventManagerImpl pgEventManager) {
         this.pgEventManager = pgEventManager;
     }

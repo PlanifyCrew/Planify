@@ -386,7 +386,7 @@ public class PostgresEventManagerImpl implements EventManager  {
         String link = baseUrl + "?event_id=" + event_id + "&email=" + tn;
         String html = "<p>Hallo " + tn + ", schön dass du dabei bist!</p>" +
                           "<p>Klicke <a href='" + link + "'>hier</a>, um dich einzuloggen und deine Teilnahme zu bestätigen.</p>";
-        Map<String, Object> body = Map.of(
+        /*Map<String, Object> body = Map.of(
             "email", tn,
             "name", "Teilnehmer",
             "subject", "Willkommen zum Event!",
@@ -410,6 +410,25 @@ public class PostgresEventManagerImpl implements EventManager  {
             System.err.println("Fehler bei Mail an " + tn + ": " + e.getMessage());
             e.printStackTrace(); // ← zeigt dir den Stacktrace
             return false;
+        }*/
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String json = """
+            {
+                "email": "%s",
+                "name": "Teilnehmer",
+                "subject": "Willkommen zum Event!",
+                "htmlContent": "<p>Hallo %s, schön dass du dabei bist!</p>"
+            }
+            """.formatted(tn, tn);
+
+            HttpEntity<String> entity = new HttpEntity<>(json, headers);
+
+            ResponseEntity<String> response = restTemplate.postForEntity(brevoUrl, entity, String.class);
+            System.out.println("Response: " + response.getStatusCode() + " - " + response.getBody());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
         return true;
