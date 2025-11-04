@@ -16,7 +16,7 @@ function initAddEventScript(initialDate) {
             if (typeof window.closeAddEventPopup === 'function') {
                 window.closeAddEventPopup();
             } else {
-                // Fallback: hide container
+                // Fallback: hide container( Ich fall gleich auf Gewalt back)
                 const cont = document.querySelector('.container');
                 if (cont) cont.style.display = 'none';
             }

@@ -7,10 +7,7 @@ formLogin.addEventListener("submit", function (event) {
     const email = formLogin.querySelector('input[type="email"]').value;
     const password = formLogin.querySelector('input[type="password"]').value;
 
-    // Determine API base URL:
-    // - when running locally use localhost:8090
-    // - when deployed prefer a relative '/api' (assumes API is served from same origin)
-    // You can also set window.API_BASE (e.g. injected by server) to override.
+    
     const API_BASE = window.API_BASE || (location.hostname === 'localhost' ? 'http://localhost:8090' : '');
     const LOGIN_URL = API_BASE ? `${API_BASE}/api/login` : '/api/login';
 
