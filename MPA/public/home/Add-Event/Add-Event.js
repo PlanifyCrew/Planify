@@ -32,16 +32,7 @@ function initAddEventScript(initialDate) {
             const beschreibung = document.getElementById('beschreibung').value;
             const startZeit = document.getElementById('startZeit').value;
             const endeZeit = document.getElementById('endeZeit').value;
-
             const token = localStorage.getItem('auth_token');
-    // Event Listener für Speichern
-    document.getElementById("speichern").addEventListener("click", async () => {
-        const titel = document.getElementById("titel").value;
-        const datum = document.getElementById("datum").value;
-        const beschreibung = document.getElementById("beschreibung").value;
-        const startZeit = document.getElementById("startZeit").value;
-        const endeZeit = document.getElementById("endeZeit").value;
-        const token = localStorage.getItem("auth_token");
 
             const data = {
                 token: token,
@@ -75,31 +66,23 @@ function initAddEventScript(initialDate) {
         try {
             const response = await fetch("http://localhost:8090/api/event", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    alert('Erfolgreich gespeichert: ' + JSON.stringify(result));
-                } else {
-                    alert('Fehler beim Speichern (' + response.status + ')');
-                }
-            } catch (error) {
-                console.error('Netzwerkfehler:', error);
-                alert('Server nicht erreichbar!');
-            }
+    try {
+        const response = await fetch('http://localhost:8090/api/event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         });
-    }
 
-    // Verwerfen
-    const verwerfenBtn = document.getElementById('verwerfen');
-    if (verwerfenBtn) {
-        verwerfenBtn.addEventListener('click', () => {
-            if (typeof window.closeAddEventPopup === 'function') window.closeAddEventPopup();
-        });
+        if (response.ok) {
+            const result = await response.json();
+            alert('Erfolgreich gespeichert: ' + JSON.stringify(result));
+        } else {
+            alert('Fehler beim Speichern (' + response.status + ')');
+        }
+    } catch (error) {
+        console.error('Netzwerkfehler:', error);
+        alert('Server nicht erreichbar!');
     }
-            if (response.ok) {
                 const result = await response.json();
                 alert("Erfolgreich gespeichert: " + JSON.stringify(result));
             } else {
