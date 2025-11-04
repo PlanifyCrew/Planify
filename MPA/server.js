@@ -26,6 +26,16 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Handle root route
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'auth', 'auth.html'));
+});
+
+// Handle auth route
+app.get('/auth', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'auth', 'auth.html'));
+});
+
+// Handle home route
+app.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'home', 'home.html'));
 });
 
