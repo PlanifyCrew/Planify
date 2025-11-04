@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Handle root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'auth', 'auth.html'));
+  res.sendFile(path.join(__dirname, 'public', 'home', 'home.html'));
 });
 
 // Handle auth route
@@ -38,6 +38,13 @@ app.get('/auth', (req, res) => {
 app.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'home', 'home.html'));
 });
+
+  // Serve auth page under /auth/ so relative links resolve to /auth/...
+  app.get('/auth.html', (req, res) => {
+    // redirect to the auth folder so relative assets (auth.css, auth.js, images)
+    // are requested under /auth/* which matches the express.static mount.
+    res.redirect(301, '/auth/auth.html');
+  });
 
 // Handle 404s
 app.use((req, res, next) => {
