@@ -45,17 +45,7 @@ function initAddEventScript(initialDate) {
                 },
                 tnListe: tnListe
             };
-        const data = {
-            token: token,
-            event: {
-                name: titel,
-                date: datum,
-                description: beschreibung,
-                startTime: startZeit,
-                endTime: endeZeit
-            },
-            tnListe: tnListe
-        };
+        })};
 
             try {
                 const response = await fetch('http://localhost:8090/api/event', {
@@ -63,9 +53,6 @@ function initAddEventScript(initialDate) {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-        try {
-            const response = await fetch("http://localhost:8090/api/event", {
-                method: "POST",
     try {
         const response = await fetch('http://localhost:8090/api/event', {
             method: 'POST',
@@ -83,15 +70,7 @@ function initAddEventScript(initialDate) {
         console.error('Netzwerkfehler:', error);
         alert('Server nicht erreichbar!');
     }
-                const result = await response.json();
-                alert("Erfolgreich gespeichert: " + JSON.stringify(result));
-            } else {
-                alert("Fehler beim Speichern (" + response.status + ")");
-            }
-        } catch (error) {
-            console.error("Netzwerkfehler:", error);
-            alert("Server nicht erreichbar!");
-        }
+             
 
         try {
             const respEmail = await fetch("http://localhost:8090/api/sendEmail", {
@@ -112,7 +91,7 @@ function initAddEventScript(initialDate) {
             console.error("E-Mail Fehler:", error);
             showAddUserFailed();
         }
-    });
+    ;
 
     // Event Listener für Verwerfen
     document.getElementById("verwerfen").addEventListener("click", () => {
@@ -217,4 +196,3 @@ function showAddUserFailed() {
     const el = document.getElementById("addUser-failed");
     el.style.display = "inline-block";
     el.classList.add("show");
-}
