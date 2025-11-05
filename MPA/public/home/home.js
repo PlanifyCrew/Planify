@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Popup öffnen
 function openAddEventPopup(date) {
   // Use absolute path to the Add-Event fragment and ensure its CSS/JS are loaded
-  fetch('/home/Add-Event/Add-Event.html')
+  fetch('Add-Event/Add-Event.html')
     .then(res => {
       if (!res.ok) throw new Error('Failed to load add-event fragment: ' + res.status);
       return res.text();
@@ -55,7 +55,7 @@ function openAddEventPopup(date) {
       popup.classList.remove('hidden');
 
       // Ensure CSS for the popup is loaded (absolute path)
-      const cssHref = '/home/Add-Event/Add-Event.css';
+      const cssHref = 'Add-Event/Add-Event.css';
       console.log('Loading add-event CSS:', cssHref);
       if (!document.querySelector(`link[href="${cssHref}"]`)) {
         const link = document.createElement('link');
@@ -65,7 +65,7 @@ function openAddEventPopup(date) {
       }
 
       // Load the script and call its initializer once loaded
-      const scriptSrc = '/home/Add-Event/Add-Event.js';
+      const scriptSrc = 'Add-Event/Add-Event.js';
       console.log('Loading add-event script:', scriptSrc);
       // Remove any previous dynamic script
       const prev = document.querySelector(`script[data-dyn-script="${scriptSrc}"]`);
